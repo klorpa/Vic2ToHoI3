@@ -9,5 +9,5 @@ infra = 6
 infra = 6
 1943.9.3 = {
 	owner = ENG
-	controller = ENG
+	controller = ENG
 }

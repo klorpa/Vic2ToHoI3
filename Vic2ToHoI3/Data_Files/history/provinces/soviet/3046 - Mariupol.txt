@@ -8,8 +8,8 @@ anti_air = 1
 industry = 1
 
 1941.12.7 = {
-	controller = GER
+	controller = GER
 }
 1943.12.1 = {
-	controller = SOV
+	controller = SOV
 }

@@ -1,6 +1,6 @@
 owner = SOV
-controller = SOV
-add_core = SOV
+controller = SOV
+add_core = SOV
 metal = 6.00
 energy = 32.00
 industry = 2

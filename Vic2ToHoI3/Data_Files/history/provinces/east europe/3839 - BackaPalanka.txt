@@ -5,6 +5,6 @@ add_core = YUG
 infra = 7
 1941.4.10 = {
 	owner = CRO
-	controller = CRO
+	controller = CRO
 	add_core = CRO
 }

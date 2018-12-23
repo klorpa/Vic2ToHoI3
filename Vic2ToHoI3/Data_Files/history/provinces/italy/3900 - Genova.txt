@@ -5,7 +5,7 @@ leadership = 0.25
 infra = 10
 industry = 2
 1943.9.23 = {
-	owner = RSI
-	controller = RSI
-	add_core = RSI
+	owner = RSI
+	controller = RSI
+	add_core = RSI
 }

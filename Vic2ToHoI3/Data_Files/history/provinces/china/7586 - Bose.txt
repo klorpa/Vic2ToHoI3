@@ -12,6 +12,6 @@ manpower = 10.00
 leadership = 0.50
 
 1944.6.20 = {
-	owner = JAP
-	controller = JAP
+	owner = JAP
+	controller = JAP
 }

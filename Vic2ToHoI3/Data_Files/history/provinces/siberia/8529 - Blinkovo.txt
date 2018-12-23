@@ -1,6 +1,6 @@
-owner = SOV
-controller = SOV
-add_core = SOV
+owner = SOV
+controller = SOV
+add_core = SOV
 metal = 6.00
 energy = 6.00
 crude_oil = 4.00

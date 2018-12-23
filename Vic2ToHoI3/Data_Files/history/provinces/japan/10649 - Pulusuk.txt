@@ -1,2 +1,2 @@
-owner = JAPcontroller = JAPadd_core = JAP
+owner = JAPcontroller = JAPadd_core = JAP
 infra = 3

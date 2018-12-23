@@ -7,6 +7,6 @@ infra = 6
 
 infra = 6
 1940.8.30 = {
-	owner = HUN
-	controller = HUN
+	owner = HUN
+	controller = HUN
 }

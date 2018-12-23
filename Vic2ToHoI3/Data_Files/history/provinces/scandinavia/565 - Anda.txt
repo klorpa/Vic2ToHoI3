@@ -18,5 +18,5 @@ infra = 4
 
 }
 1941.6.22 = {
-	controller = GER
+	controller = GER
 }

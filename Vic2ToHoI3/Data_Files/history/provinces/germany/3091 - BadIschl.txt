@@ -8,7 +8,7 @@ infra = 10
 
 infra = 10
 1938.3.12 = {
-	owner = GER
-	controller = GER
-	add_core = GER
+	owner = GER
+	controller = GER
+	add_core = GER
 }

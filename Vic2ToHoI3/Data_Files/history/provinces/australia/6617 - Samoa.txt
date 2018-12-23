@@ -1,5 +1,5 @@
-owner = NZL
+owner = NZL
 controller = NZL
-add_core = NZL
+add_core = NZL
 infra = 8
 naval_base = 2

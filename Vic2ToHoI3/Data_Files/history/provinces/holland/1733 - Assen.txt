@@ -4,5 +4,5 @@ add_core = HOL
 
 infra = 9
 1941.6.22 = {
-	controller = GER
+	controller = GER
 }

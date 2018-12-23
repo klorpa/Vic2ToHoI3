@@ -5,9 +5,9 @@ add_core = SOV
 infra = 5
 
 1941.12.7 = {
-	controller = FIN
+	controller = FIN
 }
 1944.6.20 = {
 	controller = SOV
-	land_fort = 2
+	land_fort = 2
 }

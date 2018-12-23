@@ -4,6 +4,6 @@ infra = 3
 infra = 3
 
 infra = 3
-1944.4.17 = {
-	controller = JAP
-}
+1944.4.17 = {
+	controller = JAP
+}

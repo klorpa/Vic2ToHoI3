@@ -15,9 +15,9 @@ infra = 8
 }
 1941.6.22 = {
 	owner = SOV
-	controller = SOV
+	controller = SOV
 	add_core = SOV
 }
 1941.12.7 = {
-	controller = GER
+	controller = GER
 }

@@ -1,8 +1,8 @@
 owner = ASTcontroller = AST
-add_core = AST
+add_core = AST
 infra = 3
 naval_base = 1
-
+
 1942.1.22 = {
 	owner = USA
 	controller = JAP

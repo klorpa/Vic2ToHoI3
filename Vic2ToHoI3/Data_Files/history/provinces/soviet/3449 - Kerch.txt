@@ -8,14 +8,14 @@ coastal_fort = 1
 
 
 1941.11.1 = {
-	controller = GER
+	controller = GER
 }
 1941.12.30 = {
-	controller = SOV
+	controller = SOV
 }
 1942.5.18 = {
-	controller = GER
+	controller = GER
 }
 1944.4.11 = {
-	controller = SOV
+	controller = SOV
 }

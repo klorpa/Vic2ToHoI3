@@ -11,8 +11,8 @@ leadership = 0.08
 points = 2
 
 1941.12.7 = {
-	controller = GER
+	controller = GER
 }
 1944.7.23 = {
-	controller = SOV
+	controller = SOV
 }

@@ -1,5 +1,5 @@
-owner = ENG
+owner = ENG
 controller = ENG
-add_core = ENG
+add_core = ENG
 infra = 8
 naval_base = 2

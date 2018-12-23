@@ -8,5 +8,5 @@ manpower = 1.00
 leadership = 0.08
 
 1941.12.7 = {
-	controller = GER
+	controller = GER
 }

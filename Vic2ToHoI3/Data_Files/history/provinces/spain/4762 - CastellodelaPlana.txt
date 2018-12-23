@@ -8,7 +8,7 @@ infra = 7
 
 infra = 7
 1938.9.1 = {
-	owner = SPA
-	controller = SPA
-	add_core = SPA
+	owner = SPA
+	controller = SPA
+	add_core = SPA
 }

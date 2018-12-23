@@ -5,5 +5,5 @@ add_core = POL
 
 infra = 3
 1941.12.7 = {
-	controller = GER
+	controller = GER
 }

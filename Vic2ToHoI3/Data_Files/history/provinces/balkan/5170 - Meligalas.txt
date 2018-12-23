@@ -4,8 +4,8 @@ add_core = GRE
 
 infra = 6
 1941.4.30 = {
-	controller = ITA
+	controller = ITA
 }
 1943.9.3 = {
-	controller = GER
+	controller = GER
 }

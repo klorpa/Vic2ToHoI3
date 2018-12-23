@@ -5,6 +5,6 @@ add_core = HUN
 
 infra = 8
 1940.8.30 = {
-	owner = HUN
-	controller = HUN
+	owner = HUN
+	controller = HUN
 }

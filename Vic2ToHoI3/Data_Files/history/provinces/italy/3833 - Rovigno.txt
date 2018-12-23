@@ -5,6 +5,6 @@ add_core = ITA
 infra = 8
 
 1943.9.8 = {
-	owner = GER
-	controller = GER
+	owner = GER
+	controller = GER
 } # Italy defeated

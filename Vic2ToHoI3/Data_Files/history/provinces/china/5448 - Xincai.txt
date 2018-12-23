@@ -6,6 +6,6 @@ infra = 3
 infra = 3
 
 infra = 3
-1938.7.1 = {
-	controller = JAP
+1938.7.1 = {
+	controller = JAP
 }1940.5.10 = {	controller = CHI}

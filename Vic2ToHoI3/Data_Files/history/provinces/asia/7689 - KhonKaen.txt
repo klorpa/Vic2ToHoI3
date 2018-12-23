@@ -1,6 +1,6 @@
 owner = SIA
-controller = SIA
-add_core = SIA
+controller = SIA
+add_core = SIA
 points = 1
 metal = 1.00
 energy = 1.00

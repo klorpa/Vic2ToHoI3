@@ -1,6 +1,6 @@
-owner = ENG
-controller = ENG
-add_core = ENG
+owner = ENG
+controller = ENG
+add_core = ENG
 points = 3
 metal = 2.00
 energy = 1.00
@@ -14,6 +14,6 @@ air_base = 8
 naval_base = 10
 manpower = 1.00
 leadership = 0.25
-1942.6.4 = {
-	controller = JAP
-}
+1942.6.4 = {
+	controller = JAP
+}

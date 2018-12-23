@@ -14,5 +14,5 @@ manpower = 3.00
 leadership = 0.45
 1943.9.3 = {
 	owner = ENG
-	controller = ENG
+	controller = ENG
 }

@@ -5,8 +5,8 @@ add_core = EGY
 
 infra = 3
 1942.6.30 = {
-	controller = ITA
+	controller = ITA
 }
 1942.11.9 = {
-	controller = ENG
+	controller = ENG
 }

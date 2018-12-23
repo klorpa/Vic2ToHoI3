@@ -4,7 +4,7 @@ add_core = BEL
 
 infra = 7
 1940.5.28 = {
-	controller = GER
+	controller = GER
 }
 1944.12.01 = {
 	controller = USA

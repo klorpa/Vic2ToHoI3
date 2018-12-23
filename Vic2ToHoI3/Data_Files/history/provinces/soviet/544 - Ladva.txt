@@ -6,7 +6,7 @@ add_core = FIN
 infra = 3
 
 1941.12.7 = {
-	controller = FIN
+	controller = FIN
 }
 
 1944.6.20 = {

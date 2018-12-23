@@ -5,5 +5,5 @@ add_core = BUL
 
 infra = 6
 1941.4.30 = {
-	controller = BUL
+	controller = BUL
 }

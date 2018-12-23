@@ -1,7 +1,7 @@
-owner = HOL
+owner = HOL
 controller = HOL
-add_core = HOL
-add_core = INO
+add_core = HOL
+add_core = INO
 metal = 1.00
 energy = 2.00
 rare_materials = 7.00
@@ -9,6 +9,6 @@ industry = 2
 anti_air = 2
 infra = 6
 naval_base = 7
-1942.6.4 = {
-	controller = JAP
-}
+1942.6.4 = {
+	controller = JAP
+}

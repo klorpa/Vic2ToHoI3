@@ -3,8 +3,8 @@ controller = ENG
 add_core = ENG
 infra = 2
 1940.8.19 = {
-	controller = ITA
+	controller = ITA
 }
 1941.3.20 = {
-	controller = ENG
+	controller = ENG
 }

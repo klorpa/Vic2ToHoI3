@@ -1,7 +1,7 @@
-owner = JAP
+owner = JAP
 controller = JAP
 add_core = JAP
-add_core = KOR
+add_core = KOR
 infra = 3
 
 infra = 3

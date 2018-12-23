@@ -1,4 +1,4 @@
-owner = ASTcontroller = ASTadd_core = AST
+owner = ASTcontroller = ASTadd_core = AST
 infra = 3
 
 infra = 3
@@ -6,10 +6,10 @@ infra = 3
 infra = 3
 
 infra = 3
-1942.6.4 = {
-	controller = JAP
-}
+1942.6.4 = {
+	controller = JAP
+}
 1944.4.24 = {
-	owner = USA
-	controller = USA
-}
+	owner = USA
+	controller = USA
+}
