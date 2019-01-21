@@ -33,6 +33,7 @@
     <IntDir>$(SolutionDir)\ReleaseIntermediate\</IntDir>
     <IncludePath>$(UniversalCRT_IncludePath);$(BOOST_INCLUDE);$(VCInstallDir)include;$(WindowsSdkDir)include;..\common_items;$(IncludePath)</IncludePath>
     <TargetName>V2ToHoI3Converter</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\Vic2ToHoI3</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
