@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -25,10 +25,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 
-V2Relations::V2Relations(Object* obj)
+V2Relations::V2Relations(std::shared_ptr<Object> obj)
 {
 	tag = obj->getKey();
-	vector<Object*> valueObj = obj->getValue("value");
+	std::vector<std::shared_ptr<Object>> valueObj = obj->getValue("value");
 	if (valueObj.size() > 0)
 	{
 		value = atoi(valueObj[0]->getLeaf().c_str());
@@ -38,7 +38,7 @@ V2Relations::V2Relations(Object* obj)
 		value = 0;
 	}
 
-	vector<Object*> maObj = obj->getValue("military_access");
+	std::vector<std::shared_ptr<Object>> maObj = obj->getValue("military_access");
 	if (maObj.size() > 0)
 	{
 		militaryAccess = (maObj[0]->getLeaf() == "yes");
@@ -48,25 +48,25 @@ V2Relations::V2Relations(Object* obj)
 		militaryAccess = false;
 	}
 
-	vector<Object*> lastSendObj = obj->getValue("last_send_diplomat");
+	std::vector<std::shared_ptr<Object>> lastSendObj = obj->getValue("last_send_diplomat");
 	if (lastSendObj.size() > 0)
 	{
 		lastSendDiplomat = date(lastSendObj[0]->getLeaf());
 	}
 
-	vector<Object*> lastWarObj = obj->getValue("last_war");
+	std::vector<std::shared_ptr<Object>> lastWarObj = obj->getValue("last_war");
 	if (lastWarObj.size() > 0)
 	{
 		lastWar = date(lastWarObj[0]->getLeaf());
 	}
 
-	vector<Object*> truceUntilObj = obj->getValue("truce_until");
+	std::vector<std::shared_ptr<Object>> truceUntilObj = obj->getValue("truce_until");
 	if (truceUntilObj.size() > 0)
 	{
 		truceUntil = date(truceUntilObj[0]->getLeaf());
 	}
 
-	vector<Object*> levelObj = obj->getValue("level");
+	std::vector<std::shared_ptr<Object>> levelObj = obj->getValue("level");
 	if (levelObj.size() > 0)
 	{
 		level = atoi(levelObj[0]->getLeaf().c_str());

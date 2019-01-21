@@ -1,4 +1,4 @@
-/*Copyright (c) 2014 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -35,7 +35,7 @@ using namespace std;
 class V2Pop
 {
 	public:
-		V2Pop(Object* obj);
+		V2Pop(shared_ptr<Object> obj);
 
 		int		getSize()							const { return size; };
 		string	getType()							const { return type; };

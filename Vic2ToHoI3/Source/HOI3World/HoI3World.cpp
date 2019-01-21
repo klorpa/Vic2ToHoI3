@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -21,7 +21,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 #include "HoI3World.h"
-#include <Windows.h>
 #include <fstream>
 #include <algorithm>
 #include <io.h>
@@ -29,11 +28,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <queue>
 #include <cmath>
 #include <cfloat>
-#include <sys/stat.h>
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 #include "Log.h"
 #include "../Configuration.h"
-#include "../WinUtils.h"
+#include "OSCompatibilityLayer.h"
 #include "../V2World/V2Province.h"
 #include "../V2World/V2Party.h"
 #include "HoI3Relations.h"
@@ -106,8 +104,8 @@ void HoI3World::checkCoastalProvinces()
 {
 	// determine whether each province is coastal or not by checking if it has a naval base
 	// if it's not coastal, we won't try to put any navies in it (otherwise HoI3 crashes)
-	Object*	obj2 = doParseFile((Configuration::getHoI3Path() + "\\tfh\\map\\positions.txt").c_str());
-	vector<Object*> objProv = obj2->getLeaves();
+	shared_ptr<Object> obj2 = parser_8859_15::doParseFile((Configuration::getHoI3Path() + "\\tfh\\map\\positions.txt").c_str());
+	vector<shared_ptr<Object>> objProv = obj2->getLeaves();
 	if (objProv.size() == 0)
 	{
 		LOG(LogLevel::Error) << "map\\positions.txt failed to parse.";
@@ -116,12 +114,12 @@ void HoI3World::checkCoastalProvinces()
 	for (auto itr: objProv)
 	{
 		int provinceNum = atoi(itr->getKey().c_str());
-		vector<Object*> objPos = itr->getValue("building_position");
+		vector<shared_ptr<Object>> objPos = itr->getValue("building_position");
 		if (objPos.size() == 0)
 		{
 			continue;
 		}
-		vector<Object*> objNavalBase = objPos[0]->getValue("naval_base");
+		vector<shared_ptr<Object>> objNavalBase = objPos[0]->getValue("naval_base");
 		if (objNavalBase.size() != 0)
 		{
 			// this province is coastal
@@ -198,7 +196,7 @@ void HoI3World::outputCommonCountries() const
 {
 	// Create common\countries path.
 	string countriesPath = "Output\\" + Configuration::getOutputName() + "\\common\\countries";
-	if (!WinUtils::TryCreateFolder(countriesPath))
+	if (!Utils::TryCreateFolder(countriesPath))
 	{
 		LOG(LogLevel::Error) << "Could not create \"Output\\" + Configuration::getOutputName() + "\\common\\countries\"";
 		exit(-1);
@@ -325,14 +323,14 @@ void HoI3World::outputLocalisations() const
 	// Create localisations for all new countries. We don't actually know the names yet so we just use the tags as the names.
 	LOG(LogLevel::Debug) << "Writing localisation text";
 	string localisationPath = "Output\\" + Configuration::getOutputName() + "\\localisation";
-	if (!WinUtils::TryCreateFolder(localisationPath))
+	if (!Utils::TryCreateFolder(localisationPath))
 	{
 		return;
 	}
 
 	string source = ".\\blankMod\\output\\localisation\\countries.csv";
 	string dest = localisationPath + "\\countries.csv";
-	WinUtils::TryCopyFile(source, dest);
+	Utils::TryCopyFile(source, dest);
 	FILE* localisationFile;
 	if (fopen_s(&localisationFile, dest.c_str(), "a") != 0)
 	{
@@ -703,7 +701,7 @@ void HoI3World::convertProvinceItems(const V2World& sourceWorld, const provinceM
 			}
 			else if (Configuration::getIcConversion() == "logarithmic")
 			{
-				industry = log(max(1, industry / 70000)) / log(2) * 5.33;
+				industry = log(std::max(1.0, industry / 70000)) / log(2) * 5.33;
 				dstProvItr->second->addRawIndustry(industry * Configuration::getIcFactor());
 			}
 					
@@ -757,8 +755,8 @@ void HoI3World::convertTechs(const V2World& sourceWorld)
 	map<string, vector<pair<string, int> > > invTechMap;
 
 	// build tech maps - the code is ugly so the file can be pretty
-	Object* obj = doParseFile("tech_mapping.txt");
-	vector<Object*> objs = obj->getValue("tech_map");
+	shared_ptr<Object> obj = parser_8859_15::doParseFile("tech_mapping.txt");
+	vector<shared_ptr<Object>> objs = obj->getValue("tech_map");
 	if (objs.size() < 1)
 	{
 		LOG(LogLevel::Error) << "Could not read tech map!";
@@ -775,17 +773,17 @@ void HoI3World::convertTechs(const V2World& sourceWorld)
 		{
 			if ((status == 0) && (master == "v2_inv"))
 			{
-				tech = itr->getLeaf("v2_inv");
+				tech = itr->safeGetString("v2_inv");
 				status = 2;
 			}
 			else if ((status == 0) && (master == "v2_tech"))
 			{
-				tech = itr->getLeaf("v2_tech");
+				tech = itr->safeGetString("v2_tech");
 				status = 1;
 			}
 			else
 			{
-				int value = atoi(itr->getLeaf(master).c_str());
+				int value = itr->safeGetInt(master);
 				targetTechs.push_back(pair<string, int>(master, value));
 			}
 		}
@@ -884,8 +882,8 @@ unitTypeMapping HoI3World::getUnitMappings()
 {
 	// parse the mapping file
 	map<string, multimap<HoI3RegimentType, unsigned> > unitTypeMap; // <vic, hoi>
-	Object* obj = doParseFile("unit_mapping.txt");
-	vector<Object*> leaves = obj->getLeaves();
+	shared_ptr<Object> obj = parser_8859_15::doParseFile("unit_mapping.txt");
+	vector<shared_ptr<Object>> leaves = obj->getLeaves();
 	if (leaves.size() < 1)
 	{
 		LOG(LogLevel::Error) << "No unit mapping definitions loaded.";
@@ -919,7 +917,7 @@ unitTypeMapping HoI3World::getUnitMappings()
 	// read the mappings
 	for (auto leaf: leaves)
 	{
-		vector<Object*> vicKeys = leaf->getValue("vic");
+		vector<shared_ptr<Object>> vicKeys = leaf->getValue("vic");
 		if (vicKeys.size() < 1)
 		{
 			LOG(LogLevel::Error) << "invalid unit mapping(no source).";
@@ -928,7 +926,7 @@ unitTypeMapping HoI3World::getUnitMappings()
 		{
 			// multimap allows multiple mapping and ratio mapping (e.g. 4 irregulars converted to 3 militia brigades and 1 infantry brigade)
 			multimap<HoI3RegimentType, unsigned> hoiList;
-			vector<Object*> hoiKeys = leaf->getValue("hoi0");
+			vector<shared_ptr<Object>> hoiKeys = leaf->getValue("hoi0");
 			for (auto hoiKey: hoiKeys)
 			{
 				hoiList.insert(make_pair(HoI3RegimentType(hoiKey->getLeaf()), 0));
@@ -2090,12 +2088,12 @@ void HoI3World::copyFlags(const V2World &sourceWorld, const CountryMapping& coun
 
 	// Create output folders.
 	std::string outputGraphicsFolder = "Output\\" + Configuration::getOutputName() + "\\gfx";
-	if (!WinUtils::TryCreateFolder(outputGraphicsFolder))
+	if (!Utils::TryCreateFolder(outputGraphicsFolder))
 	{
 		return;
 	}
 	std::string outputFlagFolder = outputGraphicsFolder + "\\flags";
-	if (!WinUtils::TryCreateFolder(outputFlagFolder))
+	if (!Utils::TryCreateFolder(outputFlagFolder))
 	{
 		return;
 	}
@@ -2113,10 +2111,10 @@ void HoI3World::copyFlags(const V2World &sourceWorld, const CountryMapping& coun
 		for (auto mod: mods)
 		{
 			string sourceFlagPath = Configuration::getV2Path() + "\\mod\\" + mod + "\\gfx\\flags\\"+ V2FlagFile;
-			if (WinUtils::DoesFileExist(sourceFlagPath))
+			if (Utils::DoesFileExist(sourceFlagPath))
 			{
 				std::string destFlagPath = outputFlagFolder + '\\' + HoI3Tag + ".tga";
-				flagCopied = WinUtils::TryCopyFile(sourceFlagPath, destFlagPath);
+				flagCopied = Utils::TryCopyFile(sourceFlagPath, destFlagPath);
 				if (flagCopied)
 				{
 					break;
@@ -2126,10 +2124,10 @@ void HoI3World::copyFlags(const V2World &sourceWorld, const CountryMapping& coun
 		if (!flagCopied)
 		{
 			std::string sourceFlagPath = folderPath + '\\' + V2FlagFile;
-			if (WinUtils::DoesFileExist(sourceFlagPath))
+			if (Utils::DoesFileExist(sourceFlagPath))
 			{
 				std::string destFlagPath = outputFlagFolder + '\\' + HoI3Tag + ".tga";
-				WinUtils::TryCopyFile(sourceFlagPath, destFlagPath);
+				Utils::TryCopyFile(sourceFlagPath, destFlagPath);
 			}
 		}
 	}

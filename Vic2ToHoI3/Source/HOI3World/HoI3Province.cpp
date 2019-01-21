@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "HoI3Province.h"
 #include "Log.h"
 #include "Object.h"
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 #include <sstream>
 #include <algorithm>
 #include <stdio.h>
@@ -61,16 +61,16 @@ HoI3Province::HoI3Province(string _filename)
 	string temp		= _filename.substr(slash + 1, numDigits);
 	num				= atoi(temp.c_str());
 
-	Object* obj;
-	obj = doParseFile((string(".\\blankMod\\output\\history\\provinces") + _filename).c_str());
+	shared_ptr<Object> obj;
+	obj = parser_8859_15::doParseFile((string(".\\blankMod\\output\\history\\provinces") + _filename).c_str());
 	if (obj == NULL)
 	{
 		LOG(LogLevel::Error) << "Could not parse .\\blankMod\\output\\history\\provinces" << _filename;
 		exit(-1);
 	}
 
-	vector<Object*> leaves = obj->getLeaves();
-	for (vector<Object*>::iterator itr = leaves.begin(); itr != leaves.end(); itr++)
+	vector<shared_ptr<Object>> leaves = obj->getLeaves();
+	for (vector<shared_ptr<Object>>::iterator itr = leaves.begin(); itr != leaves.end(); itr++)
 	{
 		if ((*itr)->getKey() == "owner")
 		{

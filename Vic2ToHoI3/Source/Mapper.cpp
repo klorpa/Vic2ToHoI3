@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -33,9 +33,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 
-void initProvinceMap(Object* obj, provinceMapping& provinceMap, provinceMapping& inverseProvinceMap, resettableMap& resettableProvinces)
+void initProvinceMap(shared_ptr<Object> obj, provinceMapping& provinceMap, provinceMapping& inverseProvinceMap, resettableMap& resettableProvinces)
 {
-	vector<Object*> leaves = obj->getLeaves();	// the different version number blocks
+	vector<shared_ptr<Object>> leaves = obj->getLeaves();	// the different version number blocks
 
 	if (leaves.size() < 1)
 	{
@@ -43,15 +43,15 @@ void initProvinceMap(Object* obj, provinceMapping& provinceMap, provinceMapping&
 		return;
 	}
 
-	vector<Object*> data = leaves[0]->getLeaves();	// the actual mappings
-	for (vector<Object*>::iterator i = data.begin(); i != data.end(); i++)
+	vector<shared_ptr<Object>> data = leaves[0]->getLeaves();	// the actual mappings
+	for (vector<shared_ptr<Object>>::iterator i = data.begin(); i != data.end(); i++)
 	{
 		vector<int> V2nums;					// the V2 province numbers in this mappping
 		vector<int> HoI3nums;				// the HoI3 province numbers in this mappping
 		bool			resettable = false;	// if this is a province that can be reset to V2 defaults
 
-		vector<Object*> vMaps = (*i)->getLeaves();	// the items within the mapping
-		for (vector<Object*>::iterator j = vMaps.begin(); j != vMaps.end(); j++)
+		vector<shared_ptr<Object>> vMaps = (*i)->getLeaves();	// the items within the mapping
+		for (vector<shared_ptr<Object>>::iterator j = vMaps.begin(); j != vMaps.end(); j++)
 		{
 			if ((*j)->getKey() == "vic")
 			{
@@ -165,14 +165,14 @@ HoI3AdjacencyMapping initHoI3AdjacencyMap()
 }
 
 
-void initContinentMap(Object* obj, continentMapping& continentMap)
+void initContinentMap(shared_ptr<Object> obj, continentMapping& continentMap)
 {
 	continentMap.clear();
-	vector<Object*> continentObjs = obj->getLeaves();	// the continents
+	vector<shared_ptr<Object>> continentObjs = obj->getLeaves();	// the continents
 	for (auto continentObj: continentObjs)
 	{
 		string continent = continentObj->getKey();	// the current continent
-		vector<Object*> provinceObjs = continentObj->getValue("provinces");	// the province numbers in this continent
+		vector<shared_ptr<Object>> provinceObjs = continentObj->getValue("provinces");	// the province numbers in this continent
 		for (auto provinceStr: provinceObjs[0]->getTokens())
 		{
 			const int province = atoi(provinceStr.c_str());	// the current province num
@@ -182,9 +182,9 @@ void initContinentMap(Object* obj, continentMapping& continentMap)
 }
 
 
-void mergeNations(V2World& world, Object* mergeObj)
+void mergeNations(V2World& world, shared_ptr<Object> mergeObj)
 {
-	vector<Object*> rules = mergeObj->getValue("merge_nations");	// all merging rules
+	vector<shared_ptr<Object>> rules = mergeObj->getValue("merge_nations");	// all merging rules
 	if (rules.size() < 0)
 	{
 		LOG(LogLevel::Debug) << "No nations have merging requested (skipping)";
@@ -192,13 +192,13 @@ void mergeNations(V2World& world, Object* mergeObj)
 	}
 
 	rules = rules[0]->getLeaves();	// the rules themselves
-	for (vector<Object*>::iterator itr = rules.begin(); itr != rules.end(); ++itr)
+	for (vector<shared_ptr<Object>>::iterator itr = rules.begin(); itr != rules.end(); ++itr)
 	{
-		vector<Object*> thisMerge = (*itr)->getLeaves();	// the current merge rule
+		vector<shared_ptr<Object>> thisMerge = (*itr)->getLeaves();	// the current merge rule
 		string masterTag;												// the nation to merge into
 		vector<string> slaveTags;									// the nations that will be merged into the master
 		bool enabled = false;										// whether or not this rule is enabled
-		for (vector<Object*>::iterator jtr = thisMerge.begin(); jtr != thisMerge.end(); ++jtr)
+		for (vector<shared_ptr<Object>>::iterator jtr = thisMerge.begin(); jtr != thisMerge.end(); ++jtr)
 		{
 			if ((*jtr)->getKey() == "merge" && (*jtr)->getLeaf() == "yes")
 			{
@@ -239,9 +239,9 @@ void removeEmptyNations(V2World& world)
 }
 
 
-void initStateMap(Object* obj, stateMapping& stateMap, stateIndexMapping& stateIndexMap)
+void initStateMap(shared_ptr<Object> obj, stateMapping& stateMap, stateIndexMapping& stateIndexMap)
 {
-	vector<Object*> leaves = obj->getLeaves();	// the states
+	vector<shared_ptr<Object>> leaves = obj->getLeaves();	// the states
 
 	for (unsigned int i = 0; i < leaves.size(); i++)
 	{
@@ -261,18 +261,18 @@ void initStateMap(Object* obj, stateMapping& stateMap, stateIndexMapping& stateI
 }
 
 
-unionMapping initUnionMap(Object* obj)
+unionMapping initUnionMap(shared_ptr<Object> obj)
 {
 	unionMapping unionMap;	// the cultural unions map
 
-	vector<Object*> unions = obj->getLeaves();	// the rules for cultural unions
-	for (vector<Object*>::iterator i = unions.begin(); i != unions.end(); i++)
+	vector<shared_ptr<Object>> unions = obj->getLeaves();	// the rules for cultural unions
+	for (vector<shared_ptr<Object>>::iterator i = unions.begin(); i != unions.end(); i++)
 	{
 		string tag;			// the tag for the cultural union
 		string culture;	// the culture for the cultural union
 
-		vector<Object*> aUnion = (*i)->getLeaves();	// the items for this rule
-		for (vector<Object*>::iterator j = aUnion.begin(); j != aUnion.end(); j++)
+		vector<shared_ptr<Object>> aUnion = (*i)->getLeaves();	// the items for this rule
+		for (vector<shared_ptr<Object>>::iterator j = aUnion.begin(); j != aUnion.end(); j++)
 		{
 			if ( (*j)->getKey() == "tag" )
 			{
@@ -291,16 +291,16 @@ unionMapping initUnionMap(Object* obj)
 }
 
 
-void initUnionCultures(Object* obj, unionCulturesMap& unionCultures)
+void initUnionCultures(shared_ptr<Object> obj, unionCulturesMap& unionCultures)
 {
-	vector<Object*> cultureGroups = obj->getLeaves();	// the cultural group rules
-	for (vector<Object*>::iterator i = cultureGroups.begin(); i != cultureGroups.end(); i++)
+	vector<shared_ptr<Object>> cultureGroups = obj->getLeaves();	// the cultural group rules
+	for (vector<shared_ptr<Object>>::iterator i = cultureGroups.begin(); i != cultureGroups.end(); i++)
 	{
-		vector<Object*>		culturesObj		= (*i)->getLeaves();	// the items in this rule
+		vector<shared_ptr<Object>>		culturesObj		= (*i)->getLeaves();	// the items in this rule
 		string					group				= (*i)->getKey();		// the cultural group
 		vector<string>			cultures;									// the cultures
 
-		for (vector<Object*>::iterator j = culturesObj.begin(); j != culturesObj.end(); j++)
+		for (vector<shared_ptr<Object>>::iterator j = culturesObj.begin(); j != culturesObj.end(); j++)
 		{
 			if ( (*j)->getKey() == "dynasty_names" )
 			{
@@ -330,18 +330,18 @@ void initUnionCultures(Object* obj, unionCulturesMap& unionCultures)
 }
 
 
-cultureMapping initCultureMap(Object* obj)
+cultureMapping initCultureMap(shared_ptr<Object> obj)
 {
 	cultureMapping cultureMap;						// the culture mapping
-	vector<Object*> links = obj->getLeaves();	// the culture mapping rules
+	vector<shared_ptr<Object>> links = obj->getLeaves();	// the culture mapping rules
 
-	for (vector<Object*>::iterator i = links.begin(); i != links.end(); i++)
+	for (vector<shared_ptr<Object>>::iterator i = links.begin(); i != links.end(); i++)
 	{
-		vector<Object*>	cultures	= (*i)->getLeaves();	// the items in this rule
+		vector<shared_ptr<Object>>	cultures	= (*i)->getLeaves();	// the items in this rule
 		string				dstCulture;							// the HoI3 culture
 		vector<string>		srcCulture;							// the Vic2 cultures
 
-		for (vector<Object*>::iterator j = cultures.begin(); j != cultures.end(); j++)
+		for (vector<shared_ptr<Object>>::iterator j = cultures.begin(); j != cultures.end(); j++)
 		{
 			if ( (*j)->getKey() == "hoi3" )
 			{
@@ -363,59 +363,59 @@ cultureMapping initCultureMap(Object* obj)
 }
 
 
-void initIdeaEffects(Object* obj, map<string, int>& armyInvIdeas, map<string, int>& commerceInvIdeas, map<string, int>& cultureInvIdeas, map<string, int>& industryInvIdeas, map<string, int>& navyInvIdeas, map<string, double>& UHLiberalIdeas, map<string, double>& UHReactionaryIdeas, vector< pair<string, int> >& literacyIdeas, map<string, int>& orderIdeas, map<string, int>& libertyIdeas, map<string, int>& equalityIdeas)
+void initIdeaEffects(shared_ptr<Object> obj, map<string, int>& armyInvIdeas, map<string, int>& commerceInvIdeas, map<string, int>& cultureInvIdeas, map<string, int>& industryInvIdeas, map<string, int>& navyInvIdeas, map<string, double>& UHLiberalIdeas, map<string, double>& UHReactionaryIdeas, vector< pair<string, int> >& literacyIdeas, map<string, int>& orderIdeas, map<string, int>& libertyIdeas, map<string, int>& equalityIdeas)
 {
-	vector<Object*> ideasObj = obj->getLeaves();
-	for (vector<Object*>::iterator ideasItr = ideasObj.begin(); ideasItr != ideasObj.end(); ideasItr++)
+	vector<shared_ptr<Object>> ideasObj = obj->getLeaves();
+	for (vector<shared_ptr<Object>>::iterator ideasItr = ideasObj.begin(); ideasItr != ideasObj.end(); ideasItr++)
 	{
 		string idea = (*ideasItr)->getKey();
-		vector<Object*> effects = (*ideasItr)->getLeaves();
-		for (vector<Object*>::iterator effectsItr = effects.begin(); effectsItr != effects.end(); effectsItr++)
+		vector<shared_ptr<Object>> effects = (*ideasItr)->getLeaves();
+		for (vector<shared_ptr<Object>>::iterator effectsItr = effects.begin(); effectsItr != effects.end(); effectsItr++)
 		{
 			string effectType = (*effectsItr)->getKey();
 			if (effectType == "army_investment")
 			{
-				armyInvIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				armyInvIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "commerce_investment")
 			{
-				commerceInvIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				commerceInvIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "culture_investment")
 			{
-				cultureInvIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				cultureInvIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "industry_investment")
 			{
-				industryInvIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				industryInvIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "navy_investment")
 			{
-				navyInvIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				navyInvIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "upper_house_liberal")
 			{
-				UHLiberalIdeas[idea] = atof((*effectsItr)[0].getLeaf().c_str());
+				UHLiberalIdeas[idea] = atof((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "upper_house_reactionary")
 			{
-				UHReactionaryIdeas[idea] = atof((*effectsItr)[0].getLeaf().c_str());
+				UHReactionaryIdeas[idea] = atof((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "NV_order")
 			{
-				orderIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				orderIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "NV_liberty")
 			{
-				libertyIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				libertyIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "NV_equality")
 			{
-				equalityIdeas[idea] = atoi((*effectsItr)[0].getLeaf().c_str());
+				equalityIdeas[idea] = atoi((*effectsItr)->getLeaf().c_str());
 			}
 			else if (effectType == "literacy")
 			{
-				vector<string> literacyStrs = (*effectsItr)[0].getTokens();
+				vector<string> literacyStrs = (*effectsItr)->getTokens();
 				for (unsigned int i = 0; i < literacyStrs.size(); i++)
 				{
 					literacyIdeas.push_back(make_pair(idea, atoi(literacyStrs[i].c_str())));
@@ -426,9 +426,9 @@ void initIdeaEffects(Object* obj, map<string, int>& armyInvIdeas, map<string, in
 }
 
 
-void initGovernmentJobTypes(Object* obj, governmentJobsMap& governmentJobs)
+void initGovernmentJobTypes(shared_ptr<Object> obj, governmentJobsMap& governmentJobs)
 {
-	vector<Object*> jobsObj = obj->getLeaves();
+	vector<shared_ptr<Object>> jobsObj = obj->getLeaves();
 	for (auto jobsItr: jobsObj)
 	{
 		string job = jobsItr->getKey();
@@ -443,9 +443,9 @@ void initGovernmentJobTypes(Object* obj, governmentJobsMap& governmentJobs)
 }
 
 
-void initLeaderTraitsMap(Object* obj, leaderTraitsMap& leaderTraits)
+void initLeaderTraitsMap(shared_ptr<Object> obj, leaderTraitsMap& leaderTraits)
 {
-	vector<Object*> typesObj = obj->getLeaves();
+	vector<shared_ptr<Object>> typesObj = obj->getLeaves();
 	for (auto typeItr: typesObj)
 	{
 		string type = typeItr->getKey();
@@ -460,9 +460,9 @@ void initLeaderTraitsMap(Object* obj, leaderTraitsMap& leaderTraits)
 }
 
 
-void initLeaderPersonalityMap(Object* obj, personalityMap& landPersonalityMap, personalityMap& seaPersonalityMap)
+void initLeaderPersonalityMap(shared_ptr<Object> obj, personalityMap& landPersonalityMap, personalityMap& seaPersonalityMap)
 {
-	vector<Object*> personalitiesObj = obj->getLeaves();
+	vector<shared_ptr<Object>> personalitiesObj = obj->getLeaves();
 	for (auto personalityItr: personalitiesObj)
 	{
 		string personality = personalityItr->getKey();
@@ -486,9 +486,9 @@ void initLeaderPersonalityMap(Object* obj, personalityMap& landPersonalityMap, p
 }
 
 
-void initLeaderBackgroundMap(Object* obj, backgroundMap& landBackgroundMap, backgroundMap& seaBackgroundMap)
+void initLeaderBackgroundMap(shared_ptr<Object> obj, backgroundMap& landBackgroundMap, backgroundMap& seaBackgroundMap)
 {
-	vector<Object*> backgroundObj = obj->getLeaves();
+	vector<shared_ptr<Object>> backgroundObj = obj->getLeaves();
 	for (auto backgroundItr: backgroundObj)
 	{
 		string background = backgroundItr->getKey();
@@ -512,12 +512,12 @@ void initLeaderBackgroundMap(Object* obj, backgroundMap& landBackgroundMap, back
 }
 
 
-void initNamesMapping(Object* obj, namesMapping& namesMap)
+void initNamesMapping(shared_ptr<Object> obj, namesMapping& namesMap)
 {
-	vector<Object*> groupsObj = obj->getLeaves();
+	vector<shared_ptr<Object>> groupsObj = obj->getLeaves();
 	for (auto groupsItr: groupsObj)
 	{
-		vector<Object*> culturesObj = groupsItr->getLeaves();
+		vector<shared_ptr<Object>> culturesObj = groupsItr->getLeaves();
 		for (auto culturesItr: culturesObj)
 		{
 			string key = culturesItr->getKey();
@@ -525,8 +525,8 @@ void initNamesMapping(Object* obj, namesMapping& namesMap)
 			{
 				continue;
 			}
-			vector<Object*>	firstNamesObj	= culturesItr->getValue("first_names");
-			vector<Object*>	lastNamesObj	= culturesItr->getValue("last_names");
+			vector<shared_ptr<Object>>	firstNamesObj	= culturesItr->getValue("first_names");
+			vector<shared_ptr<Object>>	lastNamesObj	= culturesItr->getValue("last_names");
 			if ((firstNamesObj.size() > 0) && (lastNamesObj.size() > 0))
 			{
 				vector<string>		firstNames		= firstNamesObj[0]->getTokens();
@@ -542,9 +542,9 @@ void initNamesMapping(Object* obj, namesMapping& namesMap)
 }
 
 
-void initPortraitMapping(Object* obj, portraitMapping& portraitMap)
+void initPortraitMapping(shared_ptr<Object> obj, portraitMapping& portraitMap)
 {
-	vector<Object*> groupsObj = obj->getLeaves();
+	vector<shared_ptr<Object>> groupsObj = obj->getLeaves();
 	for (auto groupsItr: groupsObj)
 	{
 		vector<string> portraits = groupsItr->getTokens();
@@ -553,9 +553,9 @@ void initPortraitMapping(Object* obj, portraitMapping& portraitMap)
 }
 
 
-void initAIFocusModifiers(Object* obj, AIFocusModifiers& modifiers)
+void initAIFocusModifiers(shared_ptr<Object> obj, AIFocusModifiers& modifiers)
 {
-	vector<Object*> focusesObj = obj->getLeaves();
+	vector<shared_ptr<Object>> focusesObj = obj->getLeaves();
 	for (auto focusesItr: focusesObj)
 	{
 		pair<AIFocusType, vector<AIFocusModifier>> newFocus;
@@ -577,12 +577,12 @@ void initAIFocusModifiers(Object* obj, AIFocusModifiers& modifiers)
 			newFocus.first = INF_FOCUS;
 		}
 
-		vector<Object*> modifiersObj = focusesItr->getLeaves();
+		vector<shared_ptr<Object>> modifiersObj = focusesItr->getLeaves();
 		for (auto modifiersItr: modifiersObj)
 		{
 			AIFocusModifier newModifier;
 
-			vector<Object*> modifierItems = modifiersItr->getLeaves();
+			vector<shared_ptr<Object>> modifierItems = modifiersItr->getLeaves();
 
 			if (modifierItems.size() > 0)
 			{

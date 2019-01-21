@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -42,7 +42,7 @@ typedef map< int, vector<int> >	provinceMapping;			// < destProvince, sourceProv
 typedef map< int, vector<int> >	inverseProvinceMapping;	// < sourceProvince, destProvinces >
 typedef unordered_set<int>			resettableMap;
 
-void initProvinceMap(Object* obj, provinceMapping& provMap, provinceMapping& inverseProvMap, resettableMap& resettableProvinces);
+void initProvinceMap(shared_ptr<Object> obj, provinceMapping& provMap, provinceMapping& inverseProvMap, resettableMap& resettableProvinces);
 vector<int> getHoI3ProvinceNums(inverseProvinceMapping invProvMap, int v2ProvinceNum);
 
 
@@ -58,15 +58,15 @@ HoI3AdjacencyMapping initHoI3AdjacencyMap();
 
 
 typedef map<int, string> continentMapping;	// <province, continent>
-void initContinentMap(Object* obj, continentMapping& continentMap);
+void initContinentMap(shared_ptr<Object> obj, continentMapping& continentMap);
 
 
-void mergeNations(V2World&, Object* mergeObj);
+void mergeNations(V2World&, shared_ptr<Object> mergeObj);
 void removeEmptyNations(V2World&);
 void removeOlderLandlessNations(V2World&, int excess);
 void removeLandlessNations(V2World&);
 
-void mergeNations(HoI3World&, Object* mergeObj);
+void mergeNations(HoI3World&, shared_ptr<Object> mergeObj);
 void removeDeadLandlessNations(HoI3World&);
 void removeOlderLandlessNations(HoI3World&, int excess);
 void removeLandlessNations(HoI3World&);
@@ -75,48 +75,48 @@ void removeLandlessNations(HoI3World&);
 // State Mappings
 typedef map< int, vector<int> >	stateMapping;	// < province, all other provinces in state >
 typedef map< int, int >				stateIndexMapping; // < province, state index >
-void initStateMap(Object* obj, stateMapping& stateMap, stateIndexMapping& stateIndexMap);
+void initStateMap(shared_ptr<Object> obj, stateMapping& stateMap, stateIndexMapping& stateIndexMap);
 
 
 // Union Mappings
 typedef vector< pair<string, string> > unionMapping;	// <cultures, tag>
-unionMapping initUnionMap(Object* obj);
+unionMapping initUnionMap(shared_ptr<Object> obj);
 
 
 // Cultural Union Nation mappings
 typedef map< string, vector<string> > unionCulturesMap; // <culture group, cultures>
-void initUnionCultures(Object* obj, unionCulturesMap& unionCultures);
+void initUnionCultures(shared_ptr<Object> obj, unionCulturesMap& unionCultures);
 
 // Culture Mappings
 typedef map<string, string> cultureMapping; // <srcCulture, dstCulture>
-cultureMapping initCultureMap(Object* obj);
+cultureMapping initCultureMap(shared_ptr<Object> obj);
 
 // idea effects
-void initIdeaEffects(Object* obj, map<string, int>& armyInvIdeas, map<string, int>& commerceInvIdeas, map<string, int>& cultureInvIdeas, map<string, int>& industryInvIdeas, map<string, int>& navyInvIdeas, map<string, double>& UHLiberalIdeas, map<string, double>& UHReactionaryIdeas, vector< pair<string, int> >& literacyIdeas, map<string, int>& orderIdeas, map<string, int>& libertyIdeas, map<string, int>& equalityIdeas);
+void initIdeaEffects(shared_ptr<Object> obj, map<string, int>& armyInvIdeas, map<string, int>& commerceInvIdeas, map<string, int>& cultureInvIdeas, map<string, int>& industryInvIdeas, map<string, int>& navyInvIdeas, map<string, double>& UHLiberalIdeas, map<string, double>& UHReactionaryIdeas, vector< pair<string, int> >& literacyIdeas, map<string, int>& orderIdeas, map<string, int>& libertyIdeas, map<string, int>& equalityIdeas);
 
 
 // government jobs
 typedef pair<string, vector<string>> governmentJob; // <job name, possible traits>
 typedef map<string, vector<string>> governmentJobsMap;
-void initGovernmentJobTypes(Object* obj, governmentJobsMap& governmentJobs);
+void initGovernmentJobTypes(shared_ptr<Object> obj, governmentJobsMap& governmentJobs);
 
 
 // leaderTraits
 typedef map<string, vector<string>> leaderTraitsMap; // <leader type, possible traits>
-void initLeaderTraitsMap(Object* obj, leaderTraitsMap& leaderTraits);
+void initLeaderTraitsMap(shared_ptr<Object> obj, leaderTraitsMap& leaderTraits);
 typedef map<string, vector<string>> personalityMap;	// <V2 personality, possible HoI3 traits>
-void initLeaderPersonalityMap(Object* obj, personalityMap& landPersonalityMap, personalityMap& seaPersonalityMap);
+void initLeaderPersonalityMap(shared_ptr<Object> obj, personalityMap& landPersonalityMap, personalityMap& seaPersonalityMap);
 typedef map<string, vector<string>> backgroundMap;		// <V2 background, possible HoI3 traits>
-void initLeaderBackgroundMap(Object* obj, backgroundMap& landBackgroundMap, backgroundMap& seaBackgroundMap);
+void initLeaderBackgroundMap(shared_ptr<Object> obj, backgroundMap& landBackgroundMap, backgroundMap& seaBackgroundMap);
 
 
 // names
 typedef map<string, pair<vector<string>, vector<string>>> namesMapping;
-void initNamesMapping(Object* obj, namesMapping& namesMap);
+void initNamesMapping(shared_ptr<Object> obj, namesMapping& namesMap);
 
 // portraits
 typedef map<string, vector<string>> portraitMapping; // <graphical culture, valid portraits>
-void initPortraitMapping(Object* obj, portraitMapping& portraitMap);
+void initPortraitMapping(shared_ptr<Object> obj, portraitMapping& portraitMap);
 
 // AI focus
 typedef enum {
@@ -131,7 +131,7 @@ typedef struct {
 	string	modifierRequirement;
 } AIFocusModifier;
 typedef map<AIFocusType, vector<AIFocusModifier>> AIFocusModifiers;
-void initAIFocusModifiers(Object* obj, AIFocusModifiers& modifiers);
+void initAIFocusModifiers(shared_ptr<Object> obj, AIFocusModifiers& modifiers);
 
 
 #endif // MAPPER_H

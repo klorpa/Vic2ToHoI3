@@ -1,4 +1,4 @@
-/*Copyright (c) 2014 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -25,7 +25,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <Windows.h>
 #include <fstream>
 #include "Log.h"
-#include "..\WinUtils.h"
+#include "OSCompatibilityLayer.h"
 #include "Object.h"
 
 
@@ -64,26 +64,26 @@ void V2Localisation::SetPartyName(size_t partyIndex, const std::string& language
 
 void V2Localisation::WriteToStream(std::ostream& out) const
 {
-	out << Convert(tag);
+	out << Utils::convertUTF8ToWin1252(tag);
 	for (const auto& localisedName : name)
 	{
-		out << ';' << Convert(localisedName);
+		out << ';' << Utils::convertUTF8ToWin1252(localisedName);
 	}
 	out << "x\n";
 
-	out << Convert(tag) << "_ADJ";
+	out << Utils::convertUTF8ToWin1252(tag) << "_ADJ";
 	for (const auto& localisedAdjective : adjective)
 	{
-		out << ';' << Convert(localisedAdjective);
+		out << ';' << Utils::convertUTF8ToWin1252(localisedAdjective);
 	}
 	out << "x\n";
 
 	for (const auto& party : parties)
 	{
-		out << Convert(party.key);
+		out << Utils::convertUTF8ToWin1252(party.key);
 		for (const auto& localisedPartyName : party.name)
 		{
-			out << ';' << Convert(localisedPartyName);
+			out << ';' << Utils::convertUTF8ToWin1252(localisedPartyName);
 		}
 		out << "x\n";
 	}
@@ -91,44 +91,7 @@ void V2Localisation::WriteToStream(std::ostream& out) const
 
 std::string V2Localisation::convertCountryFileName(const std::string countryFileName) const
 {
-	return Convert(countryFileName);
-}
-
-
-std::string V2Localisation::Convert(const std::string& text)
-{
-	if (text.empty())
-	{
-		return "";
-	}
-
-	int utf16Size = MultiByteToWideChar(CP_UTF8, 0, text.c_str(), text.size(), NULL, 0);
-	if (utf16Size == 0)
-	{
-		LOG(LogLevel::Warning) << "Can't convert \"" << text << "\" to UTF-16: " << WinUtils::GetLastWindowsError();
-		return "";
-	}
-	std::vector<wchar_t> utf16Text(utf16Size, L'\0');
-	int result = MultiByteToWideChar(CP_UTF8, 0, text.c_str(), text.size(), &utf16Text[0], utf16Size);
-	if (result == 0)
-	{
-		LOG(LogLevel::Warning) << "Can't convert \"" << text << "\" to UTF-16: " << WinUtils::GetLastWindowsError();
-		return "";
-	}
-	int latin1Size = WideCharToMultiByte(1252, WC_NO_BEST_FIT_CHARS | WC_COMPOSITECHECK | WC_DEFAULTCHAR, &utf16Text[0], utf16Size, NULL, 0, "0", NULL);
-	if (latin1Size == 0)
-	{
-		LOG(LogLevel::Warning) << "Can't convert \"" << text << "\" to Latin-1: " << WinUtils::GetLastWindowsError();
-		return "";
-	}
-	std::vector<char> latin1Text(latin1Size, '\0');
-	result = WideCharToMultiByte(1252, WC_NO_BEST_FIT_CHARS | WC_COMPOSITECHECK | WC_DEFAULTCHAR, &utf16Text[0], utf16Size, &latin1Text[0], latin1Size, "0", NULL);
-	if (result == 0)
-	{
-		LOG(LogLevel::Warning) << "Can't convert \"" << text << "\" to Latin-1: " << WinUtils::GetLastWindowsError();
-		return "";
-	}
-	return std::string(latin1Text.begin(), latin1Text.end());
+	return Utils::convertUTF8ToWin1252(countryFileName);
 }
 
 
@@ -141,7 +104,7 @@ void V2Localisation::ReadFromFile(const std::string& fileName)
 	// Subsequent lines are 'KEY: "Text"'
 	while (!in.eof())
 	{
-		string line;
+		std::string line;
 		getline(in, line);
 
 		if ((line[0] == '#') || (line.size() < 3)) // BE: The 3 here is arbitrary.
@@ -150,7 +113,7 @@ void V2Localisation::ReadFromFile(const std::string& fileName)
 		}
 
 		int division = line.find_first_of(';');
-		string key = line.substr(0, division);
+		std::string key = line.substr(0, division);
 
 		unsigned length = division;
 		for (auto language : languages)
@@ -161,7 +124,7 @@ void V2Localisation::ReadFromFile(const std::string& fileName)
 
 			// dash characters other than 0x2D break HoI3
 			int dash = localisations[key][language].find_first_of('–');									// the first (if any) dask in the output name
-			while (dash != string::npos)
+			while (dash != std::string::npos)
 			{
 				localisations[key][language].replace(dash, 1, "-");
 				dash = localisations[key][language].find_first_of('–');
@@ -173,22 +136,8 @@ void V2Localisation::ReadFromFile(const std::string& fileName)
 
 void V2Localisation::ReadFromAllFilesInFolder(const std::string& folderPath)
 {
-	// Get all files in the folder.
-	std::vector<std::string> fileNames;
-	WIN32_FIND_DATA findData;	// the file data
-	HANDLE findHandle = FindFirstFile((folderPath + "\\*").c_str(), &findData);	// the find handle
-	if (findHandle == INVALID_HANDLE_VALUE)
-	{
-		return;
-	}
-	do
-	{
-		if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-		{
-			fileNames.push_back(findData.cFileName);
-		}
-	} while (FindNextFile(findHandle, &findData) != 0);
-	FindClose(findHandle);
+	std::set<std::string> fileNames;
+	Utils::GetAllFilesInFolder(folderPath, fileNames);
 
 	// Read all these files.
 	for (const auto& fileName : fileNames)

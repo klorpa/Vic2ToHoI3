@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -26,6 +26,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 #include <array>
 #include <iostream>
+#include <memory>
 
 class Object;
 
@@ -39,7 +40,7 @@ public:
 	Color(int r, int g, int b);
 	// Initializes the color from an object node whose leaf value is
 	// an RGB color triplet (separated only by whitespace).
-	Color(Object* colorObject);
+	Color(std::shared_ptr<Object> colorObject);
 
 	// Randomly adjust the RGB values up or down (within the range 0-255)
 	// with a normal distribution of the given standard deviation.

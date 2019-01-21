@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -53,10 +53,6 @@ public:
 	std::string convertCountryFileName(const std::string) const;
 
 private:
-	// All localisations are stored internally as UTF-8. However HoI3 doesn't seem to handle Unicode
-	// so we convert the text to ANSI Latin-1 before writing it.
-	static std::string Convert(const std::string&);
-
 	static const size_t numLanguages = 14;
 	static const std::array<std::string, numLanguages> languages;
 

@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -41,9 +41,9 @@ governmentMapper::governmentMapper()
 }
 
 
-void governmentMapper::initGovernmentMap(Object* obj)
+void governmentMapper::initGovernmentMap(shared_ptr<Object> obj)
 {
-	vector<Object*> links = obj->getValue("link");
+	vector<shared_ptr<Object>> links = obj->getValue("link");
 	for (auto link: links)
 	{
 		govMapping newMapping;
@@ -51,7 +51,7 @@ void governmentMapper::initGovernmentMap(Object* obj)
 		newMapping.require_social_reforms_above	= 0.0;
 		newMapping.require_social_reforms_below	= 1.0;
 
-		vector<Object*> items = link->getLeaves();
+		vector<shared_ptr<Object>> items = link->getLeaves();
 		for (auto item : items)
 		{
 			string key = item->getKey();
@@ -85,20 +85,20 @@ void governmentMapper::initGovernmentMap(Object* obj)
 }
 
 
-void governmentMapper::initReforms(Object* obj)
+void governmentMapper::initReforms(shared_ptr<Object> obj)
 {
-	vector<Object*> topObjects = obj->getLeaves();
+	vector<shared_ptr<Object>> topObjects = obj->getLeaves();
 	for (auto topObject : topObjects)
 	{
 		if (topObject->getKey() == "political_reforms")
 		{
-			vector<Object*> reformObjs = topObject->getLeaves();
+			vector<shared_ptr<Object>> reformObjs = topObject->getLeaves();
 			for (auto reformObj : reformObjs)
 			{
 				reformTypes.insert(make_pair(reformObj->getKey(), ""));
 
 				int reformLevelNum = 0;
-				vector<Object*> reformLevelObjs = reformObj->getLeaves();
+				vector<shared_ptr<Object>> reformLevelObjs = reformObj->getLeaves();
 				for (auto reformLevel : reformLevelObjs)
 				{
 					if ((reformLevel->getKey() == "next_step_only") || (reformLevel->getKey() == "administrative"))
@@ -116,13 +116,13 @@ void governmentMapper::initReforms(Object* obj)
 
 		if (topObject->getKey() == "social_reforms")
 		{
-			vector<Object*> reformObjs = topObject->getLeaves();
+			vector<shared_ptr<Object>> reformObjs = topObject->getLeaves();
 			for (auto reformObj : reformObjs)
 			{
 				reformTypes.insert(make_pair(reformObj->getKey(), ""));
 
 				int reformLevelNum = 0;
-				vector<Object*> reformLevelObjs = reformObj->getLeaves();
+				vector<shared_ptr<Object>> reformLevelObjs = reformObj->getLeaves();
 				for (auto reformLevel : reformLevelObjs)
 				{
 					if ((reformLevel->getKey() == "next_step_only") || (reformLevel->getKey() == "administrative"))

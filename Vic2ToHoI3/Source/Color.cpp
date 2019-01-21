@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -39,7 +39,7 @@ Color::Color(const int r, const int g, const int b)
 : initialized(true), c({ r, g, b })
 {}
 
-Color::Color(Object* colorObject)
+Color::Color(std::shared_ptr<Object> colorObject)
 : initialized(false), c({ 0, 0, 0 })
 {
 	auto colorTokens = colorObject->getTokens();	// the colors held by the object

@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "HoI3Country.h"
 #include <fstream>
 #include "Log.h"
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 #include "HoI3Leader.h"
 #include "HoI3Minister.h"
 #include "../V2World/V2Relations.h"
@@ -736,14 +736,14 @@ void HoI3Country::initFromHistory()
 		return;
 	}
 
-	Object* obj = doParseFile(fullFilename.c_str());
+	shared_ptr<Object> obj = parser_8859_15::doParseFile(fullFilename.c_str());
 	if (obj == NULL)
 	{
 		LOG(LogLevel::Error) << "Could not parse file " << fullFilename;
 		exit(-1);
 	}
 
-	vector<Object*> results = obj->getValue("government");
+	vector<shared_ptr<Object>> results = obj->getValue("government");
 	if (results.size() > 0)
 	{
 		government = results[0]->getLeaf();

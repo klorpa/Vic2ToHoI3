@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -33,7 +33,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <boost/algorithm/string.hpp>
 
 #include "Object.h"
-#include "paradoxParser.h"
+#include "paradoxParser8859_15.h"
 #include "V2World\V2World.h"
 #include "HoI3World\HoI3World.h"
 #include "Log.h"
@@ -44,30 +44,29 @@ bool CountryMapping::ReadRules(const std::string& fileName)
 
 	// Read the rule nodes from file.
 	LOG(LogLevel::Debug) << "Parsing rules from file " << fileName;
-	initParser();
-	Object* countryMappingsFile = doParseFile(fileName.c_str());	// the parsed country mappings file
+	std::shared_ptr<Object> countryMappingsFile = parser_8859_15::doParseFile(fileName);
 	if (!countryMappingsFile)
 	{
 		LOG(LogLevel::Error) << "Failed to parse " << fileName;
 		return false;
 	}
-	vector<Object*> nodes = countryMappingsFile->getLeaves();	// the country mapping rules in the file
+	vector<shared_ptr<Object>> nodes = countryMappingsFile->getLeaves();
 	if (nodes.empty())
 	{
 		LOG(LogLevel::Error) << fileName << " does not contain a mapping";
 		return false;
 	}
-	vector<Object*> ruleNodes = nodes[0]->getLeaves();
+	vector<shared_ptr<Object>> ruleNodes = nodes[0]->getLeaves();
 
 	// Convert rule nodes into our map data structure.
 	LOG(LogLevel::Debug) << "Building rules map";
 	map<string, vector<string>> newV2TagToHoI3TagsRules;	// the mapping rules
-	for (vector<Object*>::iterator i = ruleNodes.begin(); i != ruleNodes.end(); ++i)
+	for (vector<shared_ptr<Object>>::iterator i = ruleNodes.begin(); i != ruleNodes.end(); ++i)
 	{
-		vector<Object*> rule = (*i)->getLeaves();	// an individual rule
+		vector<shared_ptr<Object>> rule = (*i)->getLeaves();	// an individual rule
 		string newV2Tag;									// the V2 tag in the rule
 		vector<string>	HoI3Tags;							// the HoI3 tags in the rule
-		for (vector<Object*>::iterator j = rule.begin(); j != rule.end(); ++j)
+		for (vector<shared_ptr<Object>>::iterator j = rule.begin(); j != rule.end(); ++j)
 		{
 			std::string key = boost::to_upper_copy((*j)->getKey());	// the key for this part of the rule
 			if (key == "VIC")

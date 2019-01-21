@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "HoI3Army.h"
 #include "Log.h"
 #include "../Configuration.h"
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 #include <sstream>
 
 
@@ -32,11 +32,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 HoI3RegimentType::HoI3RegimentType(string type)
 {
 	string	filename	= Configuration::getHoI3Path() + "\\tfh\\units\\" + type + ".txt";
-	Object*	obj		= doParseFile(filename.c_str());
+	shared_ptr<Object>	obj		= parser_8859_15::doParseFile(filename.c_str());
 	obj					= obj->getLeaves()[0];
 	name					= obj->getKey();
 
-	vector<Object*> usableByObject = obj->getValue("usable_by");
+	vector<shared_ptr<Object>> usableByObject = obj->getValue("usable_by");
 	if (usableByObject.size() > 0)
 	{
 		vector<string> tokens = usableByObject[0]->getTokens();
@@ -46,7 +46,7 @@ HoI3RegimentType::HoI3RegimentType(string type)
 		}
 	}
 
-	string unit_type = obj->getLeaf("type");
+	string unit_type = obj->safeGetString("type");
 	if (unit_type == "air")
 	{
 		force_type = air;
@@ -64,9 +64,9 @@ HoI3RegimentType::HoI3RegimentType(string type)
 		LOG(LogLevel::Error) << "Possible bad unit type in " << filename << "!";
 	}
 
-	max_strength			= atoi(obj->getLeaf("max_strength").c_str());
-	practicalBonus			= obj->getLeaf("on_completion");
-	practicalBonusFactor	= atof(obj->getLeaf("completion_size").c_str());
+	max_strength			= obj->safeGetInt("max_strength");
+	practicalBonus			= obj->safeGetString("on_completion");
+	practicalBonusFactor	= obj->safeGetFloat("completion_size");
 }
 
 

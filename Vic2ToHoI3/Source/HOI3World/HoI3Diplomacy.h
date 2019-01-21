@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -33,9 +33,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 struct HoI3Agreement
 {
-	string	type;
-	string	country1;
-	string	country2;
+	std::string	type;
+	std::string	country1;
+	std::string	country2;
 	int value; // For relation value
 	date		start_date;
 
@@ -51,9 +51,9 @@ class HoI3Diplomacy
 		void output() const;
 
 		void addAgreement(const HoI3Agreement agr);
-		const vector<HoI3Agreement> &getAgreements() const { return agreements; };
+		const std::vector<HoI3Agreement> &getAgreements() const { return agreements; };
 	private:
-		vector<HoI3Agreement>	agreements;
+		std::vector<HoI3Agreement>	agreements;
 };
 
 

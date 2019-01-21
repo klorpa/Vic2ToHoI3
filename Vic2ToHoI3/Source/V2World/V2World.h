@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ struct	V2Party;
 class V2World
 {
 	public:
-		V2World(Object* obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap);
+		V2World(shared_ptr<Object> obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap);
 
 		V2Country*					getCountry(string tag) const;
 		void							removeCountry(string tag);

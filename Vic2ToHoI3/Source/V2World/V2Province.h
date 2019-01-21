@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -41,7 +41,7 @@ class V2Factory;
 class V2Province
 {
 	public:
-		V2Province(Object* obj);
+		V2Province(shared_ptr<Object> obj);
 		void	addCore(string);
 		void	removeCore(string tag);
 

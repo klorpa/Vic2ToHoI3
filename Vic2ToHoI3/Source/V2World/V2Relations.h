@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -34,9 +34,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 class V2Relations
 {
 	public:
-		V2Relations(Object* obj);
+		V2Relations(std::shared_ptr<Object> obj);
 
-		string	getTag()			const { return tag; }
+		std::string	getTag()			const { return tag; }
 		int		getRelations()	const { return value; }
 		int		getLevel()		const { return level; }
 
@@ -46,7 +46,7 @@ class V2Relations
 		date getTruceUntil()			const { return truceUntil; }
 
 	private:
-		string	tag;
+		std::string	tag;
 		int		value;
 		bool		militaryAccess;
 		date		lastSendDiplomat;

@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -60,7 +60,7 @@ typedef struct V2State
 class V2Country
 {
 	public:
-		V2Country(Object* obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap);
+		V2Country(shared_ptr<Object> obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap);
 
 		void								addProvince(int num, V2Province* _province)		{ provinces.insert(make_pair(num, _province)); }
 		void								setColor(Color newColor)								{ color = newColor; }

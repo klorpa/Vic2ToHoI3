@@ -1,4 +1,4 @@
-/*Copyright (c) 2016 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -23,18 +23,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 #include "V2Army.h"
 #include "Log.h"
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 
 
 
-V2Regiment::V2Regiment (Object* obj)
+V2Regiment::V2Regiment (shared_ptr<Object> obj)
 {
 	string key = obj->getKey ();
 
-	std::vector<Object*> objName = obj->getValue ("name");
+	std::vector<shared_ptr<Object>> objName = obj->getValue ("name");
 	(objName.size () > 0) ? name = objName[0]->getLeaf () : name = "";
 
-	std::vector<Object*> objType = obj->getValue ("type");
+	std::vector<shared_ptr<Object>> objType = obj->getValue ("type");
 	if (objType.size () > 0)
 	{
 		type = objType[0]->getLeaf ();
@@ -45,7 +45,7 @@ V2Regiment::V2Regiment (Object* obj)
 		type = "";
 	}
 
-	std::vector<Object*> objStr = obj->getValue ("strength");
+	std::vector<shared_ptr<Object>> objStr = obj->getValue ("strength");
 	if (objStr.size () > 0)
 	{
 		strength = atof (objStr[0]->getLeaf ().c_str ());
@@ -77,15 +77,15 @@ V2Regiment::V2Regiment (Object* obj)
 }
 
 
-V2Army::V2Army (Object* obj)
+V2Army::V2Army (shared_ptr<Object> obj)
 {
 	string key = obj->getKey ();
 	isNavy = (key == "navy");
 
-	std::vector<Object*> objName = obj->getValue ("name");
+	std::vector<shared_ptr<Object>> objName = obj->getValue ("name");
 	(objName.size () > 0) ? name = objName[0]->getLeaf () : name = "";
 
-	std::vector<Object*> objLoc = obj->getValue ("location");
+	std::vector<shared_ptr<Object>> objLoc = obj->getValue ("location");
 	if (objLoc.size () > 0)
 	{
 		location = atoi (objLoc[0]->getLeaf ().c_str ());
@@ -96,24 +96,24 @@ V2Army::V2Army (Object* obj)
 		location = -1;
 	}
 
-	std::vector<Object*> objAtSea = obj->getValue ("at_sea");
+	std::vector<shared_ptr<Object>> objAtSea = obj->getValue ("at_sea");
 	(objAtSea.size () > 0) ? at_sea = atoi (objAtSea[0]->getLeaf ().c_str ()) : at_sea = 0;
 
 	regiments.clear ();
-	std::vector<Object*> objRegs = obj->getValue ("regiment");
-	for (vector<Object*>::iterator itr = objRegs.begin (); itr != objRegs.end (); ++itr)
+	std::vector<shared_ptr<Object>> objRegs = obj->getValue ("regiment");
+	for (vector<shared_ptr<Object>>::iterator itr = objRegs.begin (); itr != objRegs.end (); ++itr)
 	{
 		V2Regiment* newRegiment = new V2Regiment(*itr);
 		regiments.push_back(newRegiment);
 	}
-	std::vector<Object*> objShips = obj->getValue ("ship");
-	for (vector<Object*>::iterator itr = objShips.begin (); itr != objShips.end (); ++itr)
+	std::vector<shared_ptr<Object>> objShips = obj->getValue ("ship");
+	for (vector<shared_ptr<Object>>::iterator itr = objShips.begin (); itr != objShips.end (); ++itr)
 	{
 		V2Regiment* newShip = new V2Regiment(*itr);
 		regiments.push_back (newShip);
 	}
 
-	std::vector<Object*> objSupp = obj->getValue ("supplies");
+	std::vector<shared_ptr<Object>> objSupp = obj->getValue ("supplies");
 	if (objSupp.size () > 0)
 	{
 		supplies = atof (objSupp[0]->getLeaf ().c_str ());

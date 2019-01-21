@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -24,10 +24,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "V2World.h"
 #include <fstream>
 #include <sys/stat.h>
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 #include "Log.h"
 #include "../Configuration.h"
-#include "../WinUtils.h"
+#include "OSCompatibilityLayer.h"
 #include "V2Province.h"
 #include "V2Relations.h"
 #include "V2Army.h"
@@ -38,16 +38,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 
-V2World::V2World(Object* obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap)
+V2World::V2World(shared_ptr<Object> obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap)
 {
 	provinces.clear();
 	countries.clear();
 	string key;
-	vector<Object*> leaves = obj->getLeaves();
+	vector<shared_ptr<Object>> leaves = obj->getLeaves();
 
 	// Get great nation indices
 	unsigned countriesIndex = 1; // Starts from 1 at REB
-	vector<Object*> greatNationsObj = obj->getValue("great_nations");
+	vector<shared_ptr<Object>> greatNationsObj = obj->getValue("great_nations");
 	map<int, int> greatNationIndices; // Map greatNation index to its ranking (i.e. 0 - 7)
 	if (greatNationsObj.size() > 0)
 	{
@@ -136,7 +136,7 @@ V2World::V2World(Object* obj, const inventionNumToName& iNumToName, map<string, 
 	removeEmptyNations();
 
 	// Diplomacy
-	vector<Object*> diploObj = obj->getValue("diplomacy");
+	vector<shared_ptr<Object>> diploObj = obj->getValue("diplomacy");
 	if (diploObj.size() > 0)
 	{
 		diplomacy = V2Diplomacy(diploObj[0]);
@@ -308,14 +308,14 @@ void V2World::readCountryFiles(string countryListFile, string mod)
 		int size = line.find_last_of('\"') - start;
 		countryFileName = line.substr(start, size);
 
-		Object* countryData = NULL;
+		shared_ptr<Object> countryData = NULL;
 		string file;
 		if (mod != "")
 		{
 			file = Configuration::getV2Path() + "\\mod\\" + mod + "\\common\\countries\\" + countryFileName;
 			if (_stat(file.c_str(), &st) == 0)
 			{
-				countryData = doParseFile(file.c_str());
+				countryData = parser_8859_15::doParseFile(file.c_str());
 				if (countryData == NULL)
 				{
 					LOG(LogLevel::Warning) << "Could not parse file " << file;
@@ -327,7 +327,7 @@ void V2World::readCountryFiles(string countryListFile, string mod)
 			file = Configuration::getV2Path() +  "\\common\\countries\\" + countryFileName;
 			if (_stat(file.c_str(), &st) == 0)
 			{
-				countryData = doParseFile(file.c_str());
+				countryData = parser_8859_15::doParseFile(file.c_str());
 				if (countryData == NULL)
 				{
 					LOG(LogLevel::Warning) << "Could not parse file " << file;
@@ -340,7 +340,7 @@ void V2World::readCountryFiles(string countryListFile, string mod)
 			}
 		}
 
-		vector<Object*> colorObj = countryData->getValue("color");
+		vector<shared_ptr<Object>> colorObj = countryData->getValue("color");
 		if (colorObj.size() > 0)
 		{
 			vector<string> rgb = colorObj[0]->getTokens();
@@ -354,7 +354,7 @@ void V2World::readCountryFiles(string countryListFile, string mod)
 		}
 
 		// Get party information
-		vector<Object*> leaves = countryData->getLeaves();
+		vector<shared_ptr<Object>> leaves = countryData->getLeaves();
 
 		for (unsigned int i = 0; i < leaves.size(); i++)
 		{

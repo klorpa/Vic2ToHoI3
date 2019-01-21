@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -26,11 +26,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 
-V2Agreement::V2Agreement(Object *obj)
+V2Agreement::V2Agreement(std::shared_ptr<Object> obj)
 {
 	type = obj->getKey();
 
-	std::vector<Object*> objFirst = obj->getValue("first");
+	std::vector<std::shared_ptr<Object>> objFirst = obj->getValue("first");
 	if (objFirst.size() > 0)
 	{
 		country1 = objFirst[0]->getLeaf();
@@ -40,7 +40,7 @@ V2Agreement::V2Agreement(Object *obj)
 		LOG(LogLevel::Warning) << "Diplomatic agreement (" << type << ") has no first party";
 	}
 
-	std::vector<Object*> objSecond = obj->getValue("second");
+	std::vector<std::shared_ptr<Object>> objSecond = obj->getValue("second");
 	if (objSecond.size() > 0)
 	{
 		country2 = objSecond[0]->getLeaf();
@@ -50,7 +50,7 @@ V2Agreement::V2Agreement(Object *obj)
 		LOG(LogLevel::Warning) << "Diplomatic agreement (" << type << ") has no second party";
 	}
 
-	std::vector<Object*> objDate = obj->getValue("start_date");
+	std::vector<std::shared_ptr<Object>> objDate = obj->getValue("start_date");
 	if (objDate.size() > 0)
 	{
 		start_date = date(objDate[0]->getLeaf());
@@ -58,31 +58,31 @@ V2Agreement::V2Agreement(Object *obj)
 }
 
 
-V2Diplomacy::V2Diplomacy(Object *obj)
+V2Diplomacy::V2Diplomacy(std::shared_ptr<Object> obj)
 {
-	std::vector<Object*> objVassals = obj->getValue("vassal");
-	for (std::vector<Object*>::iterator itr = objVassals.begin(); itr != objVassals.end(); ++itr)
+	std::vector<std::shared_ptr<Object>> objVassals = obj->getValue("vassal");
+	for (std::vector<std::shared_ptr<Object>>::iterator itr = objVassals.begin(); itr != objVassals.end(); ++itr)
 	{
 		V2Agreement agr(*itr);
 		agreements.push_back(agr);
 	}
 
-	std::vector<Object*> objAlliances = obj->getValue("alliance");
-	for (std::vector<Object*>::iterator itr = objAlliances.begin(); itr != objAlliances.end(); ++itr)
+	std::vector<std::shared_ptr<Object>> objAlliances = obj->getValue("alliance");
+	for (std::vector<std::shared_ptr<Object>>::iterator itr = objAlliances.begin(); itr != objAlliances.end(); ++itr)
 	{
 		V2Agreement agr(*itr);
 		agreements.push_back(agr);
 	}
 
-	std::vector<Object*> objCBs = obj->getValue("causus_belli");
-	for (std::vector<Object*>::iterator itr = objCBs.begin(); itr != objCBs.end(); ++itr)
+	std::vector<std::shared_ptr<Object>> objCBs = obj->getValue("causus_belli");
+	for (std::vector<std::shared_ptr<Object>>::iterator itr = objCBs.begin(); itr != objCBs.end(); ++itr)
 	{
 		V2Agreement agr(*itr);
 		agreements.push_back(agr);
 	}
 
-	std::vector<Object*> objSubsidies = obj->getValue("warsubsidy");
-	for (std::vector<Object*>::iterator itr = objSubsidies.begin(); itr != objSubsidies.end(); ++itr)
+	std::vector<std::shared_ptr<Object>> objSubsidies = obj->getValue("warsubsidy");
+	for (std::vector<std::shared_ptr<Object>>::iterator itr = objSubsidies.begin(); itr != objSubsidies.end(); ++itr)
 	{
 		V2Agreement agr(*itr);
 		agreements.push_back(agr);

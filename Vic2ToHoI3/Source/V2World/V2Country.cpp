@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -30,7 +30,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <sstream>
 #include "Log.h"
 #include "../Configuration.h"
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 #include "V2Army.h"
 #include "V2Factory.h"
 #include "V2Leader.h"
@@ -41,7 +41,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 
 
-V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap)
+V2Country::V2Country(shared_ptr<Object> obj, const inventionNumToName& iNumToName, map<string, string>& armyTechs, map<string, string>& navyTechs, const continentMapping& continentMap)
 {
 	tag = obj->getKey();
 	provinces.clear();
@@ -50,7 +50,7 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 
 	greatNation = false; // Default to not great nation. This is set later in V2World.
 
-	vector<Object*> nameObj = obj->getValue("domain_region");	// the region name for dynamically generated dominions
+	vector<shared_ptr<Object>> nameObj = obj->getValue("domain_region");	// the region name for dynamically generated dominions
 	if (!nameObj.empty())
 	{
 		name = nameObj[0]->getLeaf().c_str();
@@ -62,7 +62,7 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 		adjective = "";
 	}
 
-	vector<Object*> capitalObj = obj->getValue("capital");	// the object holding the capital
+	vector<shared_ptr<Object>> capitalObj = obj->getValue("capital");	// the object holding the capital
 	(capitalObj.size() > 0) ? capital = atoi(capitalObj[0]->getLeaf().c_str()) : capital = 0;
 
 	auto continent = continentMap.find(capital);
@@ -71,10 +71,10 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 		capitalContinent = continent->second;
 	}
 
-	vector<Object*> primaryCultureObj = obj->getValue("primary_culture");	// the object holding the primary culture
+	vector<shared_ptr<Object>> primaryCultureObj = obj->getValue("primary_culture");	// the object holding the primary culture
 	(primaryCultureObj.size() > 0) ? primaryCulture = primaryCultureObj[0]->getLeaf().c_str() : primaryCulture = "";
 
-	vector<Object*> techsObj = obj->getValue("technology");	// the object holding the technology levels
+	vector<shared_ptr<Object>> techsObj = obj->getValue("technology");	// the object holding the technology levels
 	if (techsObj.size() > 0)
 	{
 		techs = techsObj[0]->getKeys();
@@ -114,7 +114,7 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 	}
 
 	activeParties.clear();
-	vector<Object*> partyObj = obj->getValue("active_party");
+	vector<shared_ptr<Object>> partyObj = obj->getValue("active_party");
 	for (auto party: partyObj)
 	{
 		activeParties.push_back(atoi(party->getLeaf().c_str()));
@@ -135,21 +135,21 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 	}
 
 	// Read spending
-	vector<Object*> spendingObj = obj->getValue("education_spending");
+	vector<shared_ptr<Object>> spendingObj = obj->getValue("education_spending");
 	if (spendingObj.size() > 0)
 	{
-		vector<Object*> settingsObj = spendingObj[0]->getValue("settings");
+		vector<shared_ptr<Object>> settingsObj = spendingObj[0]->getValue("settings");
 		(settingsObj.size() > 0) ? educationSpending = atof(settingsObj[0]->getLeaf().c_str()) : 0.0;
 	}
 
 	spendingObj = obj->getValue("military_spending");
 	if (spendingObj.size() > 0)
 	{
-		vector<Object*> settingsObj = spendingObj[0]->getValue("settings");
+		vector<shared_ptr<Object>> settingsObj = spendingObj[0]->getValue("settings");
 		(settingsObj.size() > 0) ? militarySpending = atof(settingsObj[0]->getLeaf().c_str()) : 0.0;
 	}
 
-	vector<Object*> revanchismObj = obj->getValue("revanchism");
+	vector<shared_ptr<Object>> revanchismObj = obj->getValue("revanchism");
 	if (revanchismObj.size() > 0)
 	{
 		revanchism = atof(revanchismObj[0]->getLeaf().c_str());
@@ -159,7 +159,7 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 		revanchism = 0.0;
 	}
 
-	vector<Object*> warExhaustionObj = obj->getValue("war_exhaustion");
+	vector<shared_ptr<Object>> warExhaustionObj = obj->getValue("war_exhaustion");
 	if (warExhaustionObj.size() > 0)
 	{
 		warExhaustion = atof(warExhaustionObj[0]->getLeaf().c_str());
@@ -172,7 +172,7 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 	// Read reforms
 	map<string, string> reformTypes = governmentMapper::getInstance()->getReformTypes();
 
-	vector<Object*> leaves = obj->getLeaves();
+	vector<shared_ptr<Object>> leaves = obj->getLeaves();
 	for (unsigned int i = 0; i < leaves.size(); ++i)
 	{
 		string key = leaves[i]->getKey();
@@ -183,14 +183,14 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 		}
 	}
 
-	vector<Object*> governmentObj = obj->getValue("government");	// the object holding the government
+	vector<shared_ptr<Object>> governmentObj = obj->getValue("government");	// the object holding the government
 	(governmentObj.size() > 0) ? government = governmentObj[0]->getLeaf() : government = "";
 
 	auto upperHouseObj = obj->getValue("upper_house");
 	auto ideologiesObj = upperHouseObj[0]->getLeaves();
 	for (auto ideologyObj: ideologiesObj)
 	{
-		upperHouseComposition.insert(make_pair(ideologyObj[0].getKey(), atof(ideologyObj[0].getLeaf().c_str())));
+		upperHouseComposition.insert(make_pair(ideologyObj->getKey(), atof(ideologyObj->getLeaf().c_str())));
 	}
 
 	flagFile = tag;
@@ -246,20 +246,20 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 	}
 
 	armies.clear();
-	vector<Object*> armyObj = obj->getValue("army");	// the object sholding the armies
+	vector<shared_ptr<Object>> armyObj = obj->getValue("army");	// the object sholding the armies
 	for (auto armyItr: armyObj)
 	{
 		V2Army* army = new V2Army(armyItr);
 		armies.push_back(army);
 	}
-	vector<Object*> navyObj = obj->getValue("navy");	// the objects holding the navies
+	vector<shared_ptr<Object>> navyObj = obj->getValue("navy");	// the objects holding the navies
 	for (auto navyItr: navyObj)
 	{
 		V2Army* navy = new V2Army(navyItr);
 		armies.push_back(navy);
 
 		// get transported armies
-		vector<Object*> armyObj = navyItr->getValue("army");	// the object sholding the armies
+		vector<shared_ptr<Object>> armyObj = navyItr->getValue("army");	// the object sholding the armies
 		for (auto armyItr: armyObj)
 		{
 			V2Army* army = new V2Army(armyItr);
@@ -268,26 +268,26 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 	}
 
 	leaders.clear();
-	vector<Object*> leaderObj = obj->getValue("leader");	// the objects holding the leaders
+	vector<shared_ptr<Object>> leaderObj = obj->getValue("leader");	// the objects holding the leaders
 	for (auto itr: leaderObj)
 	{
 		V2Leader* leader = new V2Leader(itr);
 		leaders.push_back(leader);
 	}
 
-	vector<Object*> techSchoolObj = obj->getValue("schools");	// the objects holding the tech school
+	vector<shared_ptr<Object>> techSchoolObj = obj->getValue("schools");	// the objects holding the tech school
 	if (techSchoolObj.size() > 0)
 	{
 		techSchool = techSchoolObj[0]->getLeaf();
 	}
 
 	// read in states
-	vector<Object*> statesObj = obj->getValue("state"); // each state in the country
+	vector<shared_ptr<Object>> statesObj = obj->getValue("state"); // each state in the country
 	for (auto statesItr : statesObj)
 	{
 		V2State newState;
 		// get the provinces in the state
-		vector<Object*> provinceObj = statesItr[0].getValue("provinces");
+		vector<shared_ptr<Object>> provinceObj = statesItr->getValue("provinces");
 		if (provinceObj.size() > 0)
 		{
 			vector<string> provinceIDs = provinceObj[0]->getTokens();
@@ -299,10 +299,10 @@ V2Country::V2Country(Object* obj, const inventionNumToName& iNumToName, map<stri
 
 		// count the employees in the state (for factory conversion)
 		int levelCount = 0;
-		vector<Object*> buildingsObj = statesItr[0].getValue("state_buildings"); // each factory in the state
+		vector<shared_ptr<Object>> buildingsObj = statesItr->getValue("state_buildings"); // each factory in the state
 		for (auto buildingsItr : buildingsObj)
 		{
-			vector<Object*> levelObj = buildingsItr[0].getValue("level"); // each employment entry in the factory.
+			vector<shared_ptr<Object>> levelObj = buildingsItr->getValue("level"); // each employment entry in the factory.
 			if (levelObj.size() > 0)
 			{
 				levelCount += atoi(levelObj[0]->getLeaf().c_str());

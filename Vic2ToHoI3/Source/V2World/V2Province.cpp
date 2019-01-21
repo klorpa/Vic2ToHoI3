@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -29,24 +29,24 @@ using namespace std;
 
 
 
-V2Province::V2Province(Object* obj)
+V2Province::V2Province(shared_ptr<Object> obj)
 {
 	num = atoi(obj->getKey().c_str());
 
-	vector<Object*> ownerObjs;				// the object holding the owner
+	vector<shared_ptr<Object>> ownerObjs;				// the object holding the owner
 	ownerObjs = obj->getValue("owner");
 	(ownerObjs.size() == 0) ? ownerString = "" : ownerString = ownerObjs[0]->getLeaf();
 	owner = NULL;
 
 	cores.clear();
-	vector<Object*> coreObjs;				// the object holding the cores
+	vector<shared_ptr<Object>> coreObjs;				// the object holding the cores
 	coreObjs = obj->getValue("core");
 	for (unsigned int i = 0; i < coreObjs.size(); i++)
 	{
 		cores.push_back(coreObjs[i]->getLeaf());
 	}
 
-	vector<Object*> buildingObjs;
+	vector<shared_ptr<Object>> buildingObjs;
 	fortLevel = 0;
 	buildingObjs = obj->getValue("fort");
 	if (buildingObjs.size() > 0)
@@ -79,8 +79,8 @@ V2Province::V2Province(Object* obj)
 	}
 
 	// read pops
-	vector<Object*> children = obj->getLeaves();
-	for (vector<Object*>::iterator itr = children.begin(); itr != children.end(); ++itr)
+	vector<shared_ptr<Object>> children = obj->getLeaves();
+	for (vector<shared_ptr<Object>>::iterator itr = children.begin(); itr != children.end(); ++itr)
 	{
 		string key = (*itr)->getKey();
 		if (key == "aristocrats" || key == "artisans" || key == "bureaucrats" || key == "capitalists" || key == "clergymen"

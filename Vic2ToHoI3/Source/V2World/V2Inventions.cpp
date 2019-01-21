@@ -1,4 +1,4 @@
-/*Copyright (c) 2015 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -24,9 +24,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
 #include "V2Inventions.h"
 #include "../Configuration.h"
-#include "../WinUtils.h"
+#include "OSCompatibilityLayer.h"
 #include "Object.h"
-#include "ParadoxParser.h"
+#include "paradoxParser8859_15.h"
 
 
 
@@ -38,7 +38,7 @@ void getInventionNums(inventionNumToName& numToName)
 	for (auto itr: vic2Mods)
 	{
 		string possiblePath = Configuration::getV2Path() + "\\mod\\" + itr + "\\inventions\\";
-		if (WinUtils::doesFolderExist(possiblePath))
+		if (Utils::doesFolderExist(possiblePath))
 		{
 			path = possiblePath;
 		}
@@ -53,11 +53,11 @@ void getInventionNums(inventionNumToName& numToName)
 	int num = 1;
 
 	set<string> techFiles;
-	WinUtils::GetAllFilesInFolder(path, techFiles);
+	Utils::GetAllFilesInFolder(path, techFiles);
 	for (auto fileItr: techFiles)
 	{
-		Object* obj = doParseFile((path + "\\" + fileItr).c_str());
-		vector<Object*> techObjs = obj->getLeaves();
+		shared_ptr<Object> obj = parser_8859_15::doParseFile((path + "\\" + fileItr).c_str());
+		vector<shared_ptr<Object>> techObjs = obj->getLeaves();
 		for (auto techItr: techObjs)
 		{
 			string name = techItr->getKey();
