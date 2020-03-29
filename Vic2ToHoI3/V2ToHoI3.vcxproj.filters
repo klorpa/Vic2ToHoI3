@@ -94,6 +94,9 @@
     <ClCompile Include="..\common_items\WinUtils.cpp">
       <Filter>CommonItems</Filter>
     </ClCompile>
+    <ClCompile Include="..\common_items\iconvlite.cpp">
+      <Filter>CommonItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Color.h" />
@@ -183,6 +186,9 @@
       <Filter>CommonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\common_items\OSCompatibilityLayer.h">
+      <Filter>CommonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common_items\iconvlite.h">
       <Filter>CommonItems</Filter>
     </ClInclude>
   </ItemGroup>

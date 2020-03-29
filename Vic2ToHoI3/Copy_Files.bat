@@ -21,6 +21,8 @@ copy "Data_Files\infatryTEMPLATE.lua" "..\Release\Vic2ToHoI3\infatryTEMPLATE.lua
 copy "Data_Files\shipTemplate.lua" "..\Release\Vic2ToHoI3\shipTemplate.lua"
 copy "Data_Files\tankTemplate.lua" "..\Release\Vic2ToHoI3\tankTemplate.lua"
 copy "Data_Files\ai_focus.txt" "..\Release\Vic2ToHoI3\ai_focus.txt"
+copy "Data_Files\Vic2toHoI3DefaultConfiguration.xml" "..\Release\Configuration\"
+copy "Data_Files\SupportedConvertersDefault.xml" "..\Release\Configuration\"
 
 del "..\Release\Vic2ToHoI3\changelog.txt
 git log --oneline --decorate >> release/log.txt

@@ -30,6 +30,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <deque>
 #include <vector>
 #include <map>
+#include <memory>
 using namespace std;
 
 class Object;
