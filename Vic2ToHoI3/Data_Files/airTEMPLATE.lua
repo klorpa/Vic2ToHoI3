@@ -1,12 +1,12 @@
 
 -- #######################################
--- Production Overides the main LUA with country specific ones
+-- Production Overrides the main LUA with country specific ones
 
 -- Handle special Build Unit, the @@@ is the Unit type in string format
 -- Build_@@@@@(ic, voProductionData, viUnitsNeeded)
 
 -- #####################
--- Exepected Returns
+-- Expected Returns
 -- IC = How much IC is left after execution
 -- Boolean = Flag indicating weather to execute generic code as well for the building type
 -- #####################
@@ -780,14 +780,14 @@ function P.OtherTechs(voTechnologyData)
 	return ignoreTech, nil
 end
 
--- END OF TECH RESEARCH OVERIDES
+-- END OF TECH RESEARCH OVERRIDES
 -- #######################################
 
 -- Land Brigades vs Air Units ratio
 --   If Air Ratio is met AI will shift its Air IC to build land units
 function P.LandToAirRatio(voProductionData)
 	local laArray = {
-		10, -- Land Briages
+		10, -- Land Bridges
 		3}; -- Air
 		
 	return laArray

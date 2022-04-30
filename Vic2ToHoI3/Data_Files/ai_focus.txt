@@ -4,7 +4,7 @@ sea_focus = {
 		factor = 0
 		lacks_port = true
 	}
-	# countries that have prioritised sea tech school should get Sea
+	# countries that have prioritized sea tech school should get Sea
 	modifier = {
 		factor = 1.5
 		tech_school = naval_tech_school
@@ -51,7 +51,7 @@ air_focus = {
 
 inf_focus = {
 	# Post-conversion industry score compared to manpower. Low value should force "inf" focus
-	modifer = {
+	modifier = {
 		factor = 5.0
 		manpower_to_IC_ratio = 1.0
 	}

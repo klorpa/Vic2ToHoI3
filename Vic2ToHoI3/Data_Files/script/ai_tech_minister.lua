@@ -1,7 +1,7 @@
 
 -- Techs that are used in the main file to be ignored
 --   techname|level (level must be 1-9 a 0 means ignore all
---   these local variables can be overiden in the country specific files
+--   these local variables can be overridden in the country specific files
 --   use as the first tech name the word "all" and it will cause the AI to ignore all the techs
 
 -- Index IDs for the main Research areas
@@ -28,7 +28,7 @@ function TechMinister_Tick(minister, vbSliders, vbResearch)
 		ministerTag = minister:GetCountryTag(),
 		ministerCountry = nil,
 		humanTag = CCurrentGameState.GetPlayer(), 
-		IsAtWar = nil, -- Boolean are they atwar with someone
+		IsAtWar = nil, -- Boolean are they at war with someone
 		IsMajor = nil, -- Boolean are they a major power
 		IsNaval = nil, -- Boolean do they have the min requirements to build ships
 		TechStatus = nil, -- TechStatus Object
@@ -415,7 +415,7 @@ function Process_Tech(pYear, pMaxYear, ResearchSlotsAllowed, ResearchSlotsNeeded
 			end
 		end
 
-		-- Overide to make sure they research industry, port, air-base and infra techs
+		-- Override to make sure they research industry, port, air-base and infra techs
 		--   this will fire regardless of what the defaults are in the country specific LUA
 		if v.ListName == "IndustrialTechs" then
 			if not(lbIndustry) or not(lbInfra) then
@@ -437,13 +437,13 @@ function Process_Tech(pYear, pMaxYear, ResearchSlotsAllowed, ResearchSlotsNeeded
 				end
 			end
 			
-		-- Overide to make sure they research Naval Bases
+		-- Override to make sure they research Naval Bases
 		elseif v.ListName == "NavalTechs" then
 			if not(lbNavalBase) and TechnologyData.PortsTotal > 0 then
 				v.ListPrefer = {"destroyer_technology"}
 			end
 			
-		-- Overide to make sure they research Air Bases
+		-- Override to make sure they research Air Bases
 		elseif v.ListName == "AirTechs" then
 			if not(lbAirBase) then
 				v.ListPrefer = {"single_engine_aircraft_design"}
@@ -451,7 +451,7 @@ function Process_Tech(pYear, pMaxYear, ResearchSlotsAllowed, ResearchSlotsNeeded
 		end
 		
 		-- Calculate what the AI wants to research in each category based on the weights
-		---  AI may put more slots in that it can research but thats no big deal
+		---  AI may put more slots in that it can research but that's no big deal
 		v.ResearchSlots = math.max(0, Utils.Round((ResearchSlotsAllowed * v.ResearchWeight) - v.CurrentSlots))
 	end
 	

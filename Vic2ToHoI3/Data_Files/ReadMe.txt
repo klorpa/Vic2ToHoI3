@@ -5,7 +5,7 @@ IMPORTANT LINKS
 ----
 
 Forum thread: http://forum.paradoxplaza.com/forum/showthread.php?582798-V2-to-HoI3-Converter-Mod!&p=18169205&viewfull=1#post18169205
-Github project: https://github.com/Idhrendur/paradoxGameConverters
+GitHub project: https://github.com/Idhrendur/paradoxGameConverters
 Documentation: https://github.com/Idhrendur/paradoxGameConverters/wiki/Vic2-To-HoI3
 
 ----

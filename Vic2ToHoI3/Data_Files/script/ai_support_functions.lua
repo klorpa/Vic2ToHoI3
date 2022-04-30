@@ -288,8 +288,8 @@ function P.AlignmentNeutral(voForeignMinisterData)
 	return false
 end
 
--- vbIdeology is an Overide for the Ideology check
--- vbIsFactionWar is an Overide for the faction we want to help being at war
+-- vbIdeology is an Override for the Ideology check
+-- vbIsFactionWar is an Override for the faction we want to help being at war
 function P.AlignmentPush(vsFaction, voForeignMinisterData, vbIdeology, vbIsFactionWar)
 	if not(voForeignMinisterData.HasFaction) then
 		local lsOurIdeology = tostring(voForeignMinisterData.ministerCountry:GetRulingIdeology():GetGroup():GetKey())

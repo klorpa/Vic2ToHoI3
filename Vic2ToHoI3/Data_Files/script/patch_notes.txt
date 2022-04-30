@@ -1,4 +1,4 @@
-- Fixed incorect tag assignment to marco polo prepare for war in the JAP.lua file
+- Fixed incorrect tag assignment to marco polo prepare for war in the JAP.lua file
 - Added the lsActorTag variable to the trade section in the USA.lua file
 - Militia techs added to Russian AI ignore list
 - Russia will no longer build garrison units.
@@ -10,7 +10,7 @@
 - AI Nations in Factions will not offer alliances to other nations.
 - AI Nations will no longer offer NAPs to countries they are allied with or countries that are aligning to the same faction.
 - When an AI nation joins a faction it will break all of its alliances.
-- Cleaned up some un-unsed variables in ai_intelligence_minister.lua
+- Cleaned up some unused variables in ai_intelligence_minister.lua
 - Added a ValidFor check to the execution of laws in ai_politics_minister.lua
 - Made Italy and Japan higher influence priority for Germany
 - Turkey will be inclined to stay out of the war unless Moscow falls or the provinces on the Soviet/Turkish border fall
@@ -28,8 +28,8 @@
 - AI had a parameter missing the production section for the Carrier call in the ai_production_minister.lua
 - AI production, fixed an issue if all unit counts where reaching 0 within a multiplier causing nothing to be built.
 - AI will no longer build planes if it has no airfields
-- AI countries that have no airfields should build atleast 1 on their capital if they have the tech
-- AI will now always build units with 2 infatry brigades and 2 random leg unit support brigades.
+- AI countries that have no airfields should build at least 1 on their capital if they have the tech
+- AI will now always build units with 2 infantry brigades and 2 random leg unit support brigades.
 - AI if the AI does not have any leg unit support brigades it will be 3 infantry brigade divisions.
 - AI fixed a bug where if a minor went to war it could cause them to mass build structures instead of units.
 - AI France will no longer research militia nor build garrison units.
@@ -40,7 +40,7 @@
 - AI Minister of Security code enhanced to have an atwar and not atwar selection prio list.
 - AI Chief of Staff assignment enhanced for atwar and not atwar versions plus a manpower check.
 - AI Build CAGs now go against Naval portion of IC instead of Air IC
-- AI Build has a new Land to Air ratio (which can be overide by country specific files). AI will shift Air IC to Land if ratio is met.
+- AI Build has a new Land to Air ratio (which can be override by country specific files). AI will shift Air IC to Land if ratio is met.
 - AI Bulgaria will start aligning with Germany if they get ownership of the provinces from Romania.
 - AI Romania will start aligning with Germany if the Soviets take their border lands.
 - AI Finland will start aligning with Germany if the Soviets and Fins are atwar.
@@ -48,22 +48,22 @@
 - AI passive spying will now use other missions including support our party.
 - AI slider supply AI enhanced for major powers so they will have larger stockpiles.
 - AI Added new weights using the Land to Air code for Japan, USA and UK.
-- AI did some performance and redability changes to the ai_politics_minister.lua
+- AI did some performance and readability changes to the ai_politics_minister.lua
 - AI added a InfluenceMonitor hook for country specific files. It tells the AI which countries to monitor so they do not join other factions.
 - AI if the target influence country is already in their corner the AI should stop influencing it and move to another target
 - AI Home spies for Communist countries will stop trying to lower neutrality once it hits 70
 - AI Utils.IsFriend method was checking distance of 25 or less it has been changed to 5 or less.
-- AI fixed an issue where Commiterm nations could not trade to eachother.
-- AI Chinese Warlods will no longer build Cavalry and Garrisons.
+- AI fixed an issue where Commiterm nations could not trade to each other.
+- AI Chinese Warlords will no longer build Cavalry and Garrisons.
 - AI Adjusted French build weights to produce more land units.
 - AI Adjusted French tech research weights to concentrate more on land.
-- AI minor performance tweeks to Mobilization code
+- AI minor performance tweaks to Mobilization code
 - AI France should now mobilize after Czechoslovakia is annexed.
 - AI will no longer attach support units to a marine division when building new ones.
 - AI only major powers will request military access (can be hooked though for minors).
 - AI added a new hook for country specific calls for requesting military access Call_MilitaryAccess
 - LUA renamed CallAlly to Call_Ally to be consistent with other hooks.
-- AI Demand Military Access Algorythm re-written.
+- AI Demand Military Access Algorithm re-written.
 - AI Major powers convoy overbuild increaed from 20% to 30%
 - AI Major power max convoy serial runs changed from 4 to 2.
 - AI Germany has a special Demand Military Access hook for Sweden.

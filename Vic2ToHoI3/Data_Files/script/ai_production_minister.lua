@@ -1225,7 +1225,7 @@ function BuildUnit(vIC, vsType, vaFirePower)
 		
 			local lsMethodOveride = "Build_" .. vsType
 			--Utils.LUA_DEBUGOUT(	tostring(lsMethodOveride))	
-			-- Check to see if the Country AI file has an overide or Defaults Do
+			-- Check to see if the Country AI file has an override or Defaults Do
 			local loFunRef = Utils.GetFunctionReference(ProductionData.ministerTag, ProductionData.IsNaval, lsMethodOveride)
 			if loFunRef then
 				vIC, ProductionData.ManpowerTotal, ProductionData.UnitNeeds[loType.Index] = loFunRef(vIC, ProductionData.ManpowerTotal, loType, ProductionData, ProductionData.UnitNeeds[loType.Index])
